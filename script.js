@@ -198,12 +198,13 @@ function renderApp() {
     clearAppRoot(); // Bersihkan root sebelum merender ulang
 
     const mainContainer = document.createElement('div');
-    mainContainer.className = "min-h-full w-full flex items-center justify-center p-4";
+    // Tambahkan z-index yang sangat tinggi ke mainContainer
+    mainContainer.className = "min-h-full w-full flex items-center justify-center p-4 z-[9999]"; // Z-index sangat tinggi
     
     const contentBox = document.createElement('div');
     // Tambahkan z-index yang tinggi ke contentBox untuk memastikan di atas elemen lain
     // Serta padding atas agar header dan tombol CS tidak terlalu mepet ke atas
-    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col max-h-[calc(100vh-32px)] overflow-y-auto custom-scrollbar z-20 pt-16"; 
+    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col max-h-[calc(100vh-32px)] overflow-y-auto custom-scrollbar z-[9998] pt-16"; 
 
     // Header Toko (dipindahkan ke dalam contentBox agar tetap di atas)
     const header = document.createElement('h1');
@@ -220,7 +221,7 @@ function renderApp() {
     whatsappLink.target = "_blank";
     whatsappLink.rel = "noopener noreferrer";
     // Mengubah top-6 menjadi top-4, karena contentBox sudah ada pt-16, ini akan lebih pas
-    whatsappLink.className = "absolute top-4 right-6 p-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-lg transition-colors z-30"; 
+    whatsappLink.className = "absolute top-4 right-6 p-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-lg transition-colors z-[9999]"; 
     whatsappLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`;
     contentBox.appendChild(whatsappLink);
 
@@ -245,7 +246,7 @@ function renderGameSelection(parentEl) {
     const gameSelectionDiv = document.createElement('div');
     // Tambah `flex-grow` agar div ini mengisi ruang di dalam contentBox dan memusatkan konten vertikal
     // Tambah z-index agar konten di dalamnya selalu di atas
-    gameSelectionDiv.className = "flex flex-col items-center justify-center flex-grow w-full text-center z-20"; 
+    gameSelectionDiv.className = "flex flex-col items-center justify-center flex-grow w-full text-center z-10"; // Z-index sedikit lebih rendah dari contentBox, tapi masih tinggi
 
     const promptText = document.createElement('p');
     promptText.className = "text-lg mb-6 text-gray-300";
@@ -254,7 +255,7 @@ function renderGameSelection(parentEl) {
 
     const buttonContainer = document.createElement('div');
     // Tambah z-index pada container tombol
-    buttonContainer.className = "flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md z-20";
+    buttonContainer.className = "flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md z-10"; // Z-index sedikit lebih rendah dari contentBox, tapi masih tinggi
 
     // Free Fire Button (menggunakan simbol Gamepad)
     const ffButton = document.createElement('button');
