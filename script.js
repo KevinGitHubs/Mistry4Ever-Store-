@@ -4,15 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameIdInput = document.getElementById('gameId');
     const serverIdInput = document.getElementById('serverId');
     const serverIdGroup = document.getElementById('serverIdGroup');
-    // const diamondAmountSelect = document.getElementById('diamondAmount'); // Ini dihapus
-    const diamondOptionsContainer = document.getElementById('diamondOptionsContainer'); // Container baru
+    const diamondOptionsContainer = document.getElementById('diamondOptionsContainer');
     const totalPriceDisplay = document.getElementById('totalPrice');
     const gameButtons = document.querySelectorAll('.game-btn');
+
+    const gameSelectionSection = document.getElementById('gameSelectionSection');
+    const topupFormSection = document.getElementById('topupFormSection');
     const gameIdLabel = document.getElementById('gameIdLabel');
 
-    let selectedGame = 'ml'; // Default game (Mobile Legends)
-    let selectedDiamondPrice = 0; // Menyimpan harga diamond yang dipilih
-    let selectedDiamondLabel = ''; // Menyimpan label diamond yang dipilih
+    let selectedGame = ''; // Tidak ada default, user harus memilih
+    let selectedDiamondPrice = 0;
+    let selectedDiamondLabel = '';
 
     const TAX_RATE = 0.11; // 11% pajak
     const ADMIN_FEE = 2000; // Biaya admin Rp 2000
@@ -71,27 +73,23 @@ document.addEventListener('DOMContentLoaded', () => {
         gameProducts.forEach(product => {
             const diamondCard = document.createElement('div');
             diamondCard.classList.add('diamond-card');
-            diamondCard.dataset.price = product.basePrice; // Simpan harga di data attribute
-            diamondCard.dataset.label = product.label; // Simpan label di data attribute
+            diamondCard.dataset.price = product.basePrice;
+            diamondCard.dataset.label = product.label;
 
             diamondCard.innerHTML = `
-                <div class="diamond-amount">${product.label}</div>
+                <i class="fas fa-gem diamond-icon"></i> <div class="diamond-amount">${product.label}</div>
                 <div class="diamond-price">Rp ${product.basePrice.toLocaleString('id-ID')}</div>
             `;
             
-            // Event listener untuk memilih kartu diamond
             diamondCard.addEventListener('click', () => {
-                // Hapus kelas 'selected' dari semua kartu lain
                 document.querySelectorAll('.diamond-card').forEach(card => {
                     card.classList.remove('selected');
                 });
-                // Tambahkan kelas 'selected' ke kartu yang diklik
                 diamondCard.classList.add('selected');
 
-                // Simpan harga dan label diamond yang dipilih
                 selectedDiamondPrice = parseFloat(diamondCard.dataset.price);
                 selectedDiamondLabel = diamondCard.dataset.label;
-                calculateTotalPrice(); // Hitung ulang harga
+                calculateTotalPrice();
             });
 
             diamondOptionsContainer.appendChild(diamondCard);
@@ -114,31 +112,40 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPriceDisplay.value = `Rp ${finalPrice.toLocaleString('id-ID')}`;
     }
 
-    // --- Event Listener untuk tombol game ---
+    // --- Event Listener untuk tombol game (untuk navigasi antar section) ---
     gameButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Hapus kelas 'active' dari semua tombol game
             gameButtons.forEach(btn => btn.classList.remove('active'));
+            // Tambahkan kelas 'active' ke tombol yang diklik
             button.classList.add('active');
+
             selectedGame = button.dataset.game;
 
-            // Tampilkan/sembunyikan Server ID untuk ML
+            // Update label ID sesuai game yang dipilih
             if (selectedGame === 'ml') {
-                serverIdGroup.style.display = 'block';
+                gameIdLabel.textContent = 'ID Game (MLBB):';
+                serverIdGroup.style.display = 'block'; // Tampilkan Server ID untuk ML
                 serverIdInput.setAttribute('required', 'true');
-            } else {
-                serverIdGroup.style.display = 'none';
+            } else { // Free Fire
+                gameIdLabel.textContent = 'ID Game (FF):';
+                serverIdGroup.style.display = 'none'; // Sembunyikan Server ID untuk FF
                 serverIdInput.removeAttribute('required');
                 serverIdInput.value = ''; // Kosongkan jika pindah ke FF
             }
-            updateDiamondOptions(); // Perbarui tampilan diamond
+
+            updateDiamondOptions(); // Perbarui tampilan diamond untuk game yang dipilih
+
+            // Navigasi: Sembunyikan Game Selection, Tampilkan Form Top Up
+            gameSelectionSection.classList.remove('active');
+            topupFormSection.classList.add('active');
         });
     });
 
     // --- Event Listener untuk submit form ---
     topupForm.addEventListener('submit', (e) => {
-        e.preventDefault(); // Mencegah form submit secara default
+        e.preventDefault();
 
-        // Validasi input
         if (!gameEmailInput.value || !gameIdInput.value) {
             alert('Mohon lengkapi Email dan ID Game Anda.');
             return;
@@ -167,30 +174,33 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Format pesan untuk WhatsApp
         let message = `🎮 Game : ${game}\n`;
         message += `✉️ Email : ${email}\n`;
         message += `📄 ID : ${id}\n`;
         if (selectedGame === 'ml') {
             message += `📋 Server ID : ${serverId}\n`;
         }
-        message += `💎 Diamond : ${selectedDiamondLabel}\n`; // Menggunakan selectedDiamondLabel
+        message += `💎 Diamond : ${selectedDiamondLabel}\n`;
         message += `💲 Harga : Rp ${finalPrice.toLocaleString('id-ID')}\n`;
         message += `📪 Metode : ${paymentMethod}\n`;
 
-        // Encode pesan untuk URL
         const encodedMessage = encodeURIComponent(message);
         const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
 
-        // Buka link WhatsApp
         window.open(whatsappUrl, '_blank');
 
         alert('Pesanan Anda akan dikirim ke WhatsApp. Mohon lanjutkan di sana.');
         topupForm.reset(); // Reset form setelah submit
-        updateDiamondOptions(); // Pastikan opsi diamond terupdate setelah reset
+        
+        // Setelah submit, kembali ke halaman pemilihan game
+        gameSelectionSection.classList.add('active');
+        topupFormSection.classList.remove('active');
+        selectedGame = ''; // Reset game yang dipilih
+        document.querySelectorAll('.game-btn').forEach(btn => btn.classList.remove('active')); // Hapus active dari tombol game
     });
 
-    // Inisialisasi awal
-    updateDiamondOptions();
-    calculateTotalPrice();
+    // Inisialisasi awal: hanya tampilkan bagian pemilihan game
+    gameSelectionSection.classList.add('active');
+    topupFormSection.classList.remove('active');
+    calculateTotalPrice(); // Set harga awal ke Rp 0
 });
