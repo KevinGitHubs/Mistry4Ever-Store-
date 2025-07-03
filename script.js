@@ -192,9 +192,16 @@ function renderApp() {
     mainContainer.className = "min-h-screen bg-gradient-to-br from-purple-800 to-indigo-900 text-white font-inter p-4 flex items-center justify-center";
     
     const contentBox = document.createElement('div');
-    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative";
+    // Untuk memastikan contentBox mengambil tinggi penuh jika hanya ada pemilihan game
+    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col"; // Tambah flex flex-col
+    
+    // Header Toko (dipindahkan ke dalam contentBox agar tetap di atas)
+    const header = document.createElement('h1');
+    header.className = "text-4xl font-extrabold text-center mb-6 text-purple-400 drop-shadow-lg";
+    header.textContent = "Mistry4Ever Store";
+    contentBox.appendChild(header);
 
-    // Tombol CS WhatsApp
+    // Tombol CS WhatsApp (dipindahkan ke dalam contentBox agar posisinya relatif terhadapnya)
     const whatsappLink = document.createElement('a');
     whatsappLink.href = `https://wa.me/${CS_PHONE_NUMBER}?text=${encodeURIComponent("Halo saya mempunyai keluhan")}`;
     whatsappLink.target = "_blank";
@@ -203,11 +210,6 @@ function renderApp() {
     whatsappLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`;
     contentBox.appendChild(whatsappLink);
 
-    // Header Toko
-    const header = document.createElement('h1');
-    header.className = "text-4xl font-extrabold text-center mb-6 text-purple-400 drop-shadow-lg";
-    header.textContent = "Mistry4Ever Store";
-    contentBox.appendChild(header);
 
     if (!selectedGame) {
         renderGameSelection(contentBox);
@@ -227,8 +229,8 @@ function renderApp() {
 // Fungsi untuk merender bagian pemilihan game
 function renderGameSelection(parentEl) {
     const gameSelectionDiv = document.createElement('div');
-    // Membuat bagian pemilihan game menjadi full screen
-    gameSelectionDiv.className = "flex flex-col items-center justify-center min-h-[calc(100vh-120px)] w-full text-center"; // Sesuaikan tinggi agar tidak menutupi header/footer jika ada
+    // Membuat bagian pemilihan game menjadi full screen di dalam contentBox
+    gameSelectionDiv.className = "flex flex-col items-center justify-center flex-grow w-full text-center"; // Menggunakan flex-grow agar mengisi sisa ruang vertikal
 
     const promptText = document.createElement('p');
     promptText.className = "text-lg mb-6 text-gray-300";
@@ -236,12 +238,12 @@ function renderGameSelection(parentEl) {
     gameSelectionDiv.appendChild(promptText);
 
     const buttonContainer = document.createElement('div');
-    buttonContainer.className = "flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md"; // Menambah max-w-md untuk kontrol lebar
+    buttonContainer.className = "flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md";
 
     // Free Fire Button
     const ffButton = document.createElement('button');
     ffButton.onclick = () => { selectedGame = "Free Fire"; resetFormState(); renderApp(); };
-    ffButton.className = "flex flex-col items-center justify-center p-6 bg-red-600 hover:bg-red-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 flex-1"; // flex-1 agar tombol mengisi ruang
+    ffButton.className = "flex flex-col items-center justify-center p-6 bg-red-600 hover:bg-red-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 flex-1";
     // Menggunakan gambar yang diunggah
     ffButton.innerHTML = `<img src="now-gg-1398-free-fire-icon-filled-256.webp" alt="Free Fire Logo" class="w-24 h-24 mb-2 rounded-full object-cover border-2 border-red-400"/> <span class="text-xl font-semibold">Free Fire</span>`;
     buttonContainer.appendChild(ffButton);
@@ -249,7 +251,7 @@ function renderGameSelection(parentEl) {
     // Mobile Legends Button
     const mlButton = document.createElement('button');
     mlButton.onclick = () => { selectedGame = "Mobile Legends"; resetFormState(); renderApp(); };
-    mlButton.className = "flex flex-col items-center justify-center p-6 bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 flex-1"; // flex-1 agar tombol mengisi ruang
+    mlButton.className = "flex flex-col items-center justify-center p-6 bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 flex-1";
     // Menggunakan gambar yang diunggah
     mlButton.innerHTML = `<img src="IMG_20250703_103319.jpg" alt="Mobile Legends Logo" class="w-24 h-24 mb-2 rounded-full object-cover border-2 border-blue-400"/> <span class="text-xl font-semibold">Mobile Legends</span>`;
     buttonContainer.appendChild(mlButton);
@@ -261,6 +263,7 @@ function renderGameSelection(parentEl) {
 // Fungsi untuk merender form top-up
 function renderTopUpForm(parentEl) {
     const formDiv = document.createElement('div');
+    formDiv.className = "flex-grow"; // Agar form mengisi sisa ruang vertikal
 
     const headerContainer = document.createElement('div');
     headerContainer.className = "flex items-center justify-between mb-6";
@@ -308,10 +311,7 @@ function renderTopUpForm(parentEl) {
             userId = e.target.value; // Tidak ada filter angka untuk FF
         } else {
             userId = e.target.value.replace(/\D/g, ''); // Hanya angka untuk ML
-            if (userId.length === 10) {
-                const zoneIdEl = document.getElementById('zoneId');
-                if (zoneIdEl) zoneIdEl.focus();
-            }
+            // Tidak perlu fokus otomatis di sini, biarkan pengguna selesai mengetik ID
         }
         updateSummary(); // Update ringkasan tanpa re-render penuh
     };
@@ -606,3 +606,4 @@ function closeModal() {
 // --- Initial Render ---
 // Render aplikasi saat DOM sudah siap
 document.addEventListener('DOMContentLoaded', renderApp);
+    
