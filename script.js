@@ -38,7 +38,7 @@ function initializeFirebase() {
             firebaseInitialized = true;
             console.log("Firebase initialized successfully!");
 
-            // Hapus listener sebelumnya jika ada
+            // Hapus listener sebelumnya jika ada untuk menghindari duplikasi
             if (authListenerUnsubscribe) {
                 authListenerUnsubscribe();
             }
@@ -56,7 +56,7 @@ function initializeFirebase() {
                         console.error("Firebase anonymous sign-in failed:", error);
                         currentUserId = null;
                         transactionStatus = 'error';
-                        message = 'Gagal mengautentikasi pengguna. Pastikan aturan keamanan Firebase mengizinkan autentikasi anonim. Detail: ' + error.message;
+                        message = 'Gagal mengautentikasi pengguna. Pastikan fitur Anonymous Authentication diaktifkan di Firebase Console Anda. Detail: ' + error.message;
                     }
                 }
                 renderApp(); // Render ulang setelah auth siap
@@ -64,7 +64,7 @@ function initializeFirebase() {
         } else {
             console.error("Firebase configuration is incomplete. Please check your firebaseConfig object in script.js.");
             transactionStatus = 'error';
-            message = 'Konfigurasi Firebase tidak lengkap. Aplikasi tidak dapat terhubung ke database.';
+            message = 'Konfigurasi Firebase tidak lengkap. Aplikasi tidak dapat terhubung ke database. Periksa kembali script.js.';
             renderApp(); // Tetap render untuk menampilkan error
         }
     } catch (e) {
@@ -196,16 +196,16 @@ function clearAppRoot() {
 
 // Fungsi utama untuk merender seluruh aplikasi
 function renderApp() {
-    clearAppRoot();
+    clearAppRoot(); // Bersihkan root sebelum merender ulang
 
     const mainContainer = document.createElement('div');
     // mainContainer sekarang mengambil tinggi penuh dari #app (yang sudah h-full)
-    mainContainer.className = "min-h-full w-full flex items-center justify-center p-4"; // min-h-full bukan min-h-screen lagi
+    mainContainer.className = "min-h-full w-full flex items-center justify-center p-4";
     
     const contentBox = document.createElement('div');
     // flex-grow agar contentBox mengisi ruang di dalam mainContainer
-    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col min-h-[calc(100vh-32px)]"; // min-h-[calc(100vh-32px)] untuk memastikan tinggi minimal pada mobile
-
+    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col min-h-[calc(100vh-32px)]";
+    
     // Header Toko (dipindahkan ke dalam contentBox agar tetap di atas)
     const header = document.createElement('h1');
     header.className = "text-4xl font-extrabold text-center mb-6 text-purple-400 drop-shadow-lg";
@@ -240,7 +240,6 @@ function renderApp() {
 // Fungsi untuk merender bagian pemilihan game
 function renderGameSelection(parentEl) {
     const gameSelectionDiv = document.createElement('div');
-    // Menggunakan flex-grow untuk mengisi sisa ruang vertikal di dalam contentBox
     gameSelectionDiv.className = "flex flex-col items-center justify-center flex-grow w-full text-center"; 
 
     const promptText = document.createElement('p');
@@ -251,18 +250,28 @@ function renderGameSelection(parentEl) {
     const buttonContainer = document.createElement('div');
     buttonContainer.className = "flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md";
 
-    // Free Fire Button (kembali ke simbol Gamepad)
+    // Free Fire Button (menggunakan simbol Gamepad)
     const ffButton = document.createElement('button');
-    ffButton.onclick = () => { selectedGame = "Free Fire"; resetFormState(); renderApp(); };
     ffButton.className = "flex flex-col items-center justify-center p-6 bg-red-600 hover:bg-red-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 flex-1";
     ffButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad mb-2 text-white"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><path d="M6 12v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path><path d="M12 18v4"></path><path d="M17 21h-2"></path><path d="M7 21h2"></path><path d="M12 12h.01"></path><path d="M12 12v.01"></path></svg><span class="text-xl font-semibold">Free Fire</span>`;
+    // Attach event listener using addEventListener
+    ffButton.addEventListener('click', () => {
+        selectedGame = "Free Fire";
+        resetFormState();
+        renderApp();
+    });
     buttonContainer.appendChild(ffButton);
 
-    // Mobile Legends Button (kembali ke simbol Gamepad)
+    // Mobile Legends Button (menggunakan simbol Gamepad)
     const mlButton = document.createElement('button');
-    mlButton.onclick = () => { selectedGame = "Mobile Legends"; resetFormState(); renderApp(); };
     mlButton.className = "flex flex-col items-center justify-center p-6 bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 flex-1";
     mlButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad mb-2 text-white"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><path d="M6 12v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path><path d="M12 18v4"></path><path d="M17 21h-2"></path><path d="M7 21h2"></path><path d="M12 12h.01"></path><path d="M12 12v.01"></path></svg><span class="text-xl font-semibold">Mobile Legends</span>`;
+    // Attach event listener using addEventListener
+    mlButton.addEventListener('click', () => {
+        selectedGame = "Mobile Legends";
+        resetFormState();
+        renderApp();
+    });
     buttonContainer.appendChild(mlButton);
 
     gameSelectionDiv.appendChild(buttonContainer);
@@ -272,7 +281,7 @@ function renderGameSelection(parentEl) {
 // Fungsi untuk merender form top-up
 function renderTopUpForm(parentEl) {
     const formDiv = document.createElement('div');
-    formDiv.className = "flex-grow custom-scrollbar overflow-y-auto"; // Tambah custom-scrollbar dan overflow-y-auto
+    formDiv.className = "flex-grow custom-scrollbar overflow-y-auto";
 
     const headerContainer = document.createElement('div');
     headerContainer.className = "flex items-center justify-between mb-6";
@@ -282,9 +291,9 @@ function renderTopUpForm(parentEl) {
     headerContainer.appendChild(title);
 
     const changeGameButton = document.createElement('button');
-    changeGameButton.onclick = () => { selectedGame = null; resetFormState(); renderApp(); };
     changeGameButton.className = "px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-md text-sm font-medium transition-colors";
     changeGameButton.textContent = "Ganti Game";
+    changeGameButton.addEventListener('click', () => { selectedGame = null; resetFormState(); renderApp(); });
     headerContainer.appendChild(changeGameButton);
     formDiv.appendChild(headerContainer);
 
@@ -302,7 +311,7 @@ function renderTopUpForm(parentEl) {
         <input type="email" id="userEmail" value="${userEmail}" placeholder="Masukkan Email Anda" class="w-full p-3 rounded-md bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors mb-4" required>
     `;
     const emailInput = emailDiv.querySelector('#userEmail');
-    emailInput.oninput = (e) => { userEmail = e.target.value; updateSummary(); };
+    emailInput.addEventListener('input', (e) => { userEmail = e.target.value; updateSummary(); });
     formDiv.appendChild(emailDiv);
 
     // Bagian Input Player ID
@@ -313,14 +322,14 @@ function renderTopUpForm(parentEl) {
         <input type="text" id="userId" value="${userId}" placeholder="${selectedGame === "Free Fire" ? "Masukkan Player ID Anda" : "Masukkan User ID Anda"}" class="w-full p-3 rounded-md bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors mb-4">
     `;
     const userIdInput = userIdDiv.querySelector('#userId');
-    userIdInput.oninput = (e) => {
+    userIdInput.addEventListener('input', (e) => {
         if (selectedGame === "Free Fire") {
             userId = e.target.value;
         } else {
             userId = e.target.value.replace(/\D/g, '');
         }
         updateSummary();
-    };
+    });
     formDiv.appendChild(userIdDiv);
 
     // Bagian Input Zone ID (Hanya untuk Mobile Legends)
@@ -337,7 +346,7 @@ function renderTopUpForm(parentEl) {
             </div>
         `;
         const zoneIdInput = zoneIdDiv.querySelector('#zoneId');
-        zoneIdInput.oninput = (e) => { zoneId = e.target.value.replace(/\D/g, ''); updateSummary(); };
+        zoneIdInput.addEventListener('input', (e) => { zoneId = e.target.value.replace(/\D/g, ''); updateSummary(); });
         formDiv.appendChild(zoneIdDiv);
     }
 
@@ -360,19 +369,15 @@ function renderTopUpForm(parentEl) {
 
     gameData[selectedGame].forEach(item => {
         const itemButton = document.createElement('button');
-        itemButton.onclick = () => { selectedItem = item; updateSummary(); };
-        let iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-diamond text-blue-400 mr-3"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.4L7 18.7c.92.92 2.22 1.4 3.54 1.38h.04c1.32.02 2.62-.46 3.54-1.38l4.3-4.3a2.41 2.41 0 0 0 0-3.4L17 5.3c-.92-.92-2.22-1.4-3.54-1.38h-.04c-1.32-.02-2.62.46-3.54 1.38z"></path><path d="M7 18.7 17 5.3"></path><path d="M17 18.7 7 5.3"></path></svg>`;
-        if (item.type === "pass") {
-            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar text-yellow-400 mr-3"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>`;
-        }
         itemButton.className = `flex items-center justify-between p-4 rounded-lg border-2 transition-all duration-200 ease-in-out ${selectedItem?.id === item.id ? 'border-purple-500 bg-purple-900 shadow-lg' : 'border-gray-700 bg-gray-800 hover:border-purple-600 hover:bg-gray-700'}`;
         itemButton.innerHTML = `
             <div class="flex items-center">
-                ${iconSvg}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-diamond text-blue-400 mr-3"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.4L7 18.7c.92.92 2.22 1.4 3.54 1.38h.04c1.32.02 2.62-.46 3.54-1.38l4.3-4.3a2.41 2.41 0 0 0 0-3.4L17 5.3c-.92-.92-2.22-1.4-3.54-1.38h-.04c-1.32-.02-2.62.46-3.54 1.38z"></path><path d="M7 18.7 17 5.3"></path><path d="M17 18.7 7 5.3"></path></svg>
                 <span class="text-lg font-medium text-left">${item.label}</span>
             </div>
             <span class="text-xl font-bold text-green-400">${formatRupiah(item.basePrice)}</span>
         `;
+        itemButton.addEventListener('click', () => { selectedItem = item; updateSummary(); });
         diamondGrid.appendChild(itemButton);
     });
     diamondSection.appendChild(diamondGrid);
@@ -388,7 +393,6 @@ function renderTopUpForm(parentEl) {
     paymentMethods.forEach(method => {
         const methodButton = document.createElement('button');
         const isDisabled = method.isUnderMaintenance || (selectedItem && selectedItem.restrictedPaymentMethods && selectedItem.restrictedPaymentMethods.includes(method.id));
-        methodButton.onclick = () => { if (!isDisabled) { selectedPaymentMethod = method; updateSummary(); } };
         methodButton.disabled = isDisabled;
         methodButton.className = `flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all duration-200 ease-in-out ${selectedPaymentMethod?.id === method.id ? 'border-purple-500 bg-purple-900 shadow-lg' : 'border-gray-700 bg-gray-800 hover:border-purple-600 hover:bg-gray-700'} ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`;
         methodButton.innerHTML = `
@@ -396,6 +400,7 @@ function renderTopUpForm(parentEl) {
             <span class="text-sm mt-1 text-center">${method.name}</span>
             ${method.isUnderMaintenance ? `<span class="text-xs text-red-400 mt-1">Diperbaiki</span>` : ''}
         `;
+        methodButton.addEventListener('click', () => { if (!isDisabled) { selectedPaymentMethod = method; updateSummary(); } });
         paymentGrid.appendChild(methodButton);
     });
     paymentSection.appendChild(paymentGrid);
@@ -413,11 +418,9 @@ function renderTopUpForm(parentEl) {
 
     // Tombol Top-Up
     const topUpButton = document.createElement('button');
-    topUpButton.onclick = handleTopUp;
-    const isTopUpDisabled = !userId || !userEmail || !selectedItem || !selectedPaymentMethod || selectedPaymentMethod.isUnderMaintenance || (selectedItem && selectedItem.restrictedPaymentMethods && selectedItem.restrictedPaymentMethods.includes(selectedPaymentMethod.id)) || (selectedGame === "Mobile Legends" && !zoneId) || !firebaseInitialized || !currentUserId;
-    topUpButton.disabled = isTopUpDisabled;
-    topUpButton.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out ${isTopUpDisabled ? 'bg-gray-600 cursor-not-allowed opacity-70' : 'bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-opacity-50'}`;
-    topUpButton.textContent = "Top Up Sekarang!";
+    topUpButton.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out`;
+    topUpButton.addEventListener('click', handleTopUp);
+    updateTopUpButtonState(topUpButton); // Panggil untuk pertama kali
     formDiv.appendChild(topUpButton);
 
     parentEl.appendChild(formDiv);
@@ -427,6 +430,7 @@ function renderTopUpForm(parentEl) {
 function updateSummary() {
     const summaryContainer = document.getElementById('order-summary-container');
     const validationMsgContainer = document.getElementById('validation-message-container');
+    const topUpButton = document.querySelector('button.w-full.py-4'); // Dapatkan tombol di sini
 
     if (!summaryContainer) return;
 
@@ -462,17 +466,7 @@ function updateSummary() {
     }
 
     updateValidationMessage(validationMsgContainer);
-
-    const topUpButton = document.querySelector('button.w-full.py-4');
-    if (topUpButton) {
-        const isTopUpDisabled = !userId || !userEmail || !selectedItem || !selectedPaymentMethod || selectedPaymentMethod.isUnderMaintenance || (selectedItem && selectedItem.restrictedPaymentMethods && selectedItem.restrictedPaymentMethods.includes(selectedPaymentMethod.id)) || (selectedGame === "Mobile Legends" && !zoneId) || !firebaseInitialized || !currentUserId;
-        topUpButton.disabled = isTopUpDisabled;
-        if (isTopUpDisabled) {
-            topUpButton.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out bg-gray-600 cursor-not-allowed opacity-70`;
-        } else {
-            topUpButton.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-opacity-50`;
-        }
-    }
+    updateTopUpButtonState(topUpButton); // Perbarui status tombol Top Up
 }
 
 // Fungsi untuk memperbarui pesan validasi input
@@ -492,6 +486,17 @@ function updateValidationMessage(container) {
     }
 }
 
+// Fungsi terpisah untuk memperbarui status dan gaya tombol Top Up
+function updateTopUpButtonState(button) {
+    if (!button) return;
+    const isTopUpDisabled = !userId || !userEmail || !selectedItem || !selectedPaymentMethod || selectedPaymentMethod.isUnderMaintenance || (selectedItem && selectedItem.restrictedPaymentMethods && selectedItem.restrictedPaymentMethods.includes(selectedPaymentMethod.id)) || (selectedGame === "Mobile Legends" && !zoneId) || !firebaseInitialized || !currentUserId;
+    button.disabled = isTopUpDisabled;
+    if (isTopUpDisabled) {
+        button.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out bg-gray-600 cursor-not-allowed opacity-70`;
+    } else {
+        button.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-opacity-50`;
+    }
+}
 
 function renderErrorModal(parentEl) {
     const modalOverlay = document.createElement('div');
@@ -506,7 +511,7 @@ function renderErrorModal(parentEl) {
         <button id="closeModalBtn" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-md text-white font-medium transition-colors">Tutup</button>
     `;
     
-    modalContent.querySelector('#closeModalBtn').onclick = closeModal;
+    modalContent.querySelector('#closeModalBtn').addEventListener('click', closeModal);
     modalOverlay.appendChild(modalContent);
     parentEl.appendChild(modalOverlay);
 }
@@ -536,7 +541,7 @@ async function handleTopUp() {
 
     if (!firebaseInitialized || !db || !auth || !currentUserId) {
         transactionStatus = 'error';
-        message = 'Aplikasi tidak terhubung ke database atau pengguna tidak terautentikasi. Silakan coba lagi.';
+        message = 'Aplikasi tidak terhubung ke database atau pengguna tidak terautentikasi. Silakan coba lagi. Pastikan Firebase Authentication (Anonymous) dan Firestore Rules sudah benar.';
         renderApp();
         return;
     }
@@ -603,4 +608,5 @@ function closeModal() {
 }
 
 // --- Initial Render ---
-document.addEventListener('DOMContentLoaded', initializeFirebase); // Panggil initializeFirebase saat DOM siap
+// Panggil initializeFirebase saat DOM sudah siap
+document.addEventListener('DOMContentLoaded', initializeFirebase);
