@@ -198,8 +198,6 @@ function renderApp() {
     clearAppRoot(); // Bersihkan root sebelum merender ulang
 
     const mainContainer = document.createElement('div');
-    // mainContainer sekarang mengambil tinggi penuh dari #app (yang sudah h-full)
-    // dan memusatkan kontennya (contentBox)
     mainContainer.className = "min-h-full w-full flex items-center justify-center p-4";
     
     const contentBox = document.createElement('div');
@@ -214,12 +212,13 @@ function renderApp() {
     contentBox.appendChild(header);
 
     // Tombol CS WhatsApp (dipindahkan ke dalam contentBox agar posisinya relatif terhadapnya)
-    // Sesuaikan `top` dan `right` untuk memberi jarak dari judul
+    // Sesuaikan `top` dan `right` untuk memberi jarak yang lebih baik dari judul
     const whatsappLink = document.createElement('a');
     whatsappLink.href = `https://wa.me/${CS_PHONE_NUMBER}?text=${encodeURIComponent("Halo saya mempunyai keluhan")}`;
     whatsappLink.target = "_blank";
     whatsappLink.rel = "noopener noreferrer";
-    whatsappLink.className = "absolute top-4 right-4 p-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-lg transition-colors z-10"; // top-4 right-4
+    // Mengubah top-4 menjadi top-6 atau top-8 untuk memberi jarak lebih
+    whatsappLink.className = "absolute top-6 right-6 p-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-lg transition-colors z-10"; 
     whatsappLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`;
     contentBox.appendChild(whatsappLink);
 
@@ -242,7 +241,8 @@ function renderApp() {
 // Fungsi untuk merender bagian pemilihan game
 function renderGameSelection(parentEl) {
     const gameSelectionDiv = document.createElement('div');
-    gameSelectionDiv.className = "flex flex-col items-center justify-center w-full text-center"; 
+    // Tambah `flex-grow` dan `justify-center` untuk memastikan konten mengisi ruang dan terpusat vertikal
+    gameSelectionDiv.className = "flex flex-col items-center justify-center flex-grow w-full text-center"; 
 
     const promptText = document.createElement('p');
     promptText.className = "text-lg mb-6 text-gray-300";
@@ -258,6 +258,7 @@ function renderGameSelection(parentEl) {
     ffButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad mb-2 text-white"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><path d="M6 12v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path><path d="M12 18v4"></path><path d="M17 21h-2"></path><path d="M7 21h2"></path><path d="M12 12h.01"></path><path d="M12 12v.01"></path></svg><span class="text-xl font-semibold">Free Fire</span>`;
     // Attach event listener using addEventListener
     ffButton.addEventListener('click', () => {
+        console.log("Free Fire button clicked!"); // Diagnostik
         selectedGame = "Free Fire";
         resetFormState();
         renderApp();
@@ -270,6 +271,7 @@ function renderGameSelection(parentEl) {
     mlButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad mb-2 text-white"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><path d="M6 12v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path><path d="M12 18v4"></path><path d="M17 21h-2"></path><path d="M7 21h2"></path><path d="M12 12h.01"></path><path d="M12 12v.01"></path></svg><span class="text-xl font-semibold">Mobile Legends</span>`;
     // Attach event listener using addEventListener
     mlButton.addEventListener('click', () => {
+        console.log("Mobile Legends button clicked!"); // Diagnostik
         selectedGame = "Mobile Legends";
         resetFormState();
         renderApp();
@@ -283,8 +285,8 @@ function renderGameSelection(parentEl) {
 // Fungsi untuk merender form top-up
 function renderTopUpForm(parentEl) {
     const formDiv = document.createElement('div');
-    // Hapus `custom-scrollbar` dan `overflow-y-auto` dari formDiv, karena sudah di contentBox
-    formDiv.className = ""; // Tidak perlu kelas khusus di sini
+    // formDiv tidak perlu kelas scrolling, karena scrolling akan di contentBox
+    formDiv.className = "flex flex-col flex-grow"; // Tambah flex flex-col flex-grow agar konten form mengisi ruang
 
     const headerContainer = document.createElement('div');
     headerContainer.className = "flex items-center justify-between mb-6";
@@ -617,3 +619,4 @@ function closeModal() {
 // --- Initial Render ---
 // Panggil initializeFirebase saat DOM sudah siap
 document.addEventListener('DOMContentLoaded', initializeFirebase);
+
