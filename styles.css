@@ -30,10 +30,13 @@ body {
 
 .section {
     display: none; /* Sembunyikan semua section secara default */
+    opacity: 0; /* Untuk transisi fade */
+    transition: opacity 0.5s ease-in-out;
 }
 
 .section.active {
     display: block; /* Tampilkan section yang aktif */
+    opacity: 1; /* Transisi fade-in */
 }
 
 /* Header Styling */
@@ -139,6 +142,11 @@ h1 {
     text-align: center;
     color: rgba(255, 255, 255, 0.7);
     border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.game-btn .logo-circle .fas { /* Styling untuk ikon Font Awesome di dalam lingkaran */
+    font-size: 3em; /* Ukuran ikon */
+    color: white;
 }
 
 /* Form Styling */
@@ -360,4 +368,4 @@ button[type="submit"] .fas, button[type="submit"] .fab {
     .diamond-options-grid {
         grid-template-columns: 1fr; /* Satu kolom di layar sangat kecil */
     }
-          }
+        }
