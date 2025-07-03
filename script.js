@@ -203,9 +203,9 @@ function renderApp() {
     mainContainer.className = "min-h-full w-full flex items-center justify-center p-4";
     
     const contentBox = document.createElement('div');
-    // contentBox tidak lagi min-h-screen, tingginya akan sesuai konten
-    // Tambah `overflow-y-auto` untuk memungkinkan scrolling pada contentBox jika isinya melebihi tinggi
-    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col overflow-y-auto custom-scrollbar"; 
+    // Tambah `max-h-[calc(100vh-32px)]` untuk membatasi tinggi maksimum contentBox
+    // dan `overflow-y-auto` untuk memungkinkan scrolling jika isinya melebihi tinggi
+    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col overflow-y-auto custom-scrollbar max-h-[calc(100vh-32px)]"; 
 
     // Header Toko (dipindahkan ke dalam contentBox agar tetap di atas)
     const header = document.createElement('h1');
@@ -214,11 +214,12 @@ function renderApp() {
     contentBox.appendChild(header);
 
     // Tombol CS WhatsApp (dipindahkan ke dalam contentBox agar posisinya relatif terhadapnya)
+    // Sesuaikan `top` dan `right` untuk memberi jarak dari judul
     const whatsappLink = document.createElement('a');
     whatsappLink.href = `https://wa.me/${CS_PHONE_NUMBER}?text=${encodeURIComponent("Halo saya mempunyai keluhan")}`;
     whatsappLink.target = "_blank";
     whatsappLink.rel = "noopener noreferrer";
-    whatsappLink.className = "absolute top-4 right-4 p-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-lg transition-colors z-10";
+    whatsappLink.className = "absolute top-4 right-4 p-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-lg transition-colors z-10"; // top-4 right-4
     whatsappLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`;
     contentBox.appendChild(whatsappLink);
 
@@ -241,7 +242,6 @@ function renderApp() {
 // Fungsi untuk merender bagian pemilihan game
 function renderGameSelection(parentEl) {
     const gameSelectionDiv = document.createElement('div');
-    // Tidak lagi flex-grow atau h-full, tingginya akan sesuai kontennya
     gameSelectionDiv.className = "flex flex-col items-center justify-center w-full text-center"; 
 
     const promptText = document.createElement('p');
@@ -283,8 +283,8 @@ function renderGameSelection(parentEl) {
 // Fungsi untuk merender form top-up
 function renderTopUpForm(parentEl) {
     const formDiv = document.createElement('div');
-    // Hapus `flex-grow` dari formDiv, karena scrolling akan ditangani oleh contentBox
-    formDiv.className = "custom-scrollbar"; // `overflow-y-auto` dipindahkan ke contentBox
+    // Hapus `custom-scrollbar` dan `overflow-y-auto` dari formDiv, karena sudah di contentBox
+    formDiv.className = ""; // Tidak perlu kelas khusus di sini
 
     const headerContainer = document.createElement('div');
     headerContainer.className = "flex items-center justify-between mb-6";
