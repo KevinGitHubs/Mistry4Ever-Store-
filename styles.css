@@ -1,91 +1,184 @@
+/* General Styling */
 body {
-    font-family: sans-serif;
-    background-color: #f0f2f5;
+    font-family: 'Poppins', sans-serif; /* Menggunakan font Poppins */
+    background: linear-gradient(135deg, #2c3e50, #34495e); /* Gradient background yang gelap dan modern */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    color: #333;
+    -webkit-font-smoothing: antialiased; /* Untuk teks lebih halus */
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; /* Warna putih bersih untuk container */
+    padding: 40px;
+    border-radius: 15px; /* Sudut lebih membulat */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Bayangan lebih dramatis */
     width: 100%;
-    max-width: 500px;
+    max-width: 550px; /* Lebar maksimum yang sedikit lebih besar */
+    box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+    animation: fadeIn 0.8s ease-out; /* Animasi fade-in saat dimuat */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Styling */
+.header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.logo-icon {
+    font-size: 3.5em; /* Ukuran ikon logo lebih besar */
+    color: #4CAF50; /* Warna hijau cerah */
+    margin-bottom: 10px;
+    animation: bounceIn 1s ease-out;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
 }
 
 h1 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 5px; /* Kurangi margin bawah */
+    font-size: 2.5em;
+    color: #2c3e50; /* Warna gelap */
+    margin-bottom: 5px;
+    font-weight: 700; /* Lebih tebal */
 }
 
 h2 {
-    text-align: center;
-    color: #555;
-    margin-top: 5px;    /* Tambah margin atas */
-    margin-bottom: 30px;
-    font-size: 1.2em;
+    font-size: 1.1em;
+    color: #7f8c8d; /* Abu-abu sedang */
+    margin-top: 0;
+    font-weight: 400; /* Normal */
 }
 
-
+/* Game Selection */
 .game-selection {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 25px;
+    gap: 15px; /* Jarak antar tombol game */
+    margin-bottom: 30px;
 }
 
 .game-btn {
-    background-color: #eee;
-    border: 1px solid #ddd;
-    padding: 10px 20px;
-    border-radius: 5px;
+    background-color: #f8f9fa; /* Latar belakang tombol netral */
+    border: 2px solid #e9ecef; /* Border yang sedikit lebih tebal */
+    padding: 12px 25px;
+    border-radius: 10px; /* Lebih membulat */
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s, border-color 0.3s;
+    font-size: 1.1em;
+    font-weight: 600; /* Lebih tebal */
+    color: #555;
+    transition: all 0.3s ease; /* Transisi lebih halus */
+    display: flex; /* Untuk menempatkan gambar dan teks sejajar */
+    align-items: center;
+    gap: 10px; /* Jarak antara gambar dan teks */
+}
+
+.game-btn img {
+    width: 30px; /* Ukuran logo game */
+    height: 30px;
+    border-radius: 5px; /* Sedikit membulat pada gambar */
+}
+
+.game-btn:hover {
+    background-color: #e2e6ea;
+    border-color: #d1d5da;
+    transform: translateY(-2px); /* Efek angkat sedikit saat hover */
 }
 
 .game-btn.active {
-    background-color: #007bff;
+    background-color: #4CAF50; /* Warna hijau saat aktif */
     color: white;
-    border-color: #007bff;
+    border-color: #4CAF50;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); /* Bayangan untuk tombol aktif */
+    transform: translateY(-2px); /* Tetap terangkat saat aktif */
 }
 
+/* Form Styling */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
+    margin-bottom: 10px;
+    font-weight: 600; /* Lebih tebal */
+    color: #444;
+    display: flex; /* Untuk ikon sejajar dengan teks */
+    align-items: center;
+    gap: 8px; /* Jarak antara ikon dan teks */
+}
+
+label .fas, label .fab {
+    color: #4CAF50; /* Warna ikon hijau */
+    font-size: 1.1em;
 }
 
 input[type="email"],
 input[type="text"],
 select {
-    width: calc(100% - 20px);
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+    width: calc(100% - 24px); /* Sesuaikan dengan padding */
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px; /* Lebih membulat */
+    font-size: 1em;
+    color: #495057;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="email"]:focus,
+input[type="text"]:focus,
+select:focus {
+    border-color: #4CAF50; /* Border hijau saat fokus */
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25); /* Glow hijau */
+    outline: none;
+}
+
+/* Price Display */
+.price-summary {
+    background-color: #f0faf0; /* Latar belakang hijau muda */
+    border-left: 5px solid #4CAF50; /* Border kiri hijau */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
 }
 
 .price-display {
-    background-color: #e9ecef;
-    font-weight: bold;
-    color: #333;
+    background-color: #e0ffe0 !important; /* Latar belakang lebih terang */
+    font-weight: 700; /* Sangat tebal */
+    color: #28a745 !important; /* Warna teks hijau gelap */
+    padding: 10px;
+    border: 1px solid #a8e6a8 !important; /* Border hijau muda */
+    border-radius: 6px;
+    text-align: center;
+    font-size: 1.1em;
 }
 
+small {
+    font-size: 0.8em;
+    color: #6c757d; /* Abu-abu gelap */
+    margin-top: 8px;
+    display: block;
+    text-align: right;
+}
+
+/* Payment Methods */
 .payment-methods {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+    justify-content: center; /* Rata tengah */
+    margin-top: 10px;
 }
 
 .payment-methods label {
@@ -93,32 +186,83 @@ select {
     align-items: center;
     font-weight: normal;
     cursor: pointer;
+    background-color: #f1f3f5; /* Latar belakang abu-abu muda */
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease;
+    min-width: 90px; /* Lebar minimum untuk konsistensi */
+    justify-content: center; /* Rata tengah teks dalam label */
+}
+
+.payment-methods label:hover {
+    background-color: #e5e7e9;
+    border-color: #d8dbe0;
 }
 
 .payment-methods input[type="radio"] {
     margin-right: 8px;
-    transform: scale(1.2);
+    transform: scale(1.2); /* Ukuran radio button lebih besar */
+    accent-color: #4CAF50; /* Warna centang hijau (modern browsers) */
 }
 
+/* Submit Button */
 button[type="submit"] {
-    background-color: #28a745;
+    background-color: #007bff; /* Warna biru cerah */
     color: white;
-    padding: 12px 20px;
+    padding: 15px 25px;
     border: none;
-    border-radius: 5px;
-    font-size: 18px;
+    border-radius: 10px; /* Lebih membulat */
+    font-size: 1.2em;
+    font-weight: 700; /* Sangat tebal */
     cursor: pointer;
     width: 100%;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
 }
 
 button[type="submit"]:hover {
-    background-color: #218838;
+    background-color: #0056b3; /* Biru lebih gelap saat hover */
+    transform: translateY(-2px); /* Efek angkat */
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3); /* Bayangan saat hover */
 }
 
-small {
-    font-size: 0.85em;
-    color: #777;
-    margin-top: 5px;
-    display: block;
-                }
+button[type="submit"] .fas, button[type="submit"] .fab {
+    font-size: 1.3em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        padding: 25px;
+        margin: 15px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1em;
+    }
+
+    .game-selection {
+        flex-direction: column; /* Tombol game bertumpuk di layar kecil */
+        gap: 10px;
+    }
+
+    .game-btn {
+        width: 100%; /* Lebar penuh */
+        justify-content: center; /* Rata tengah konten */
+    }
+
+    input[type="email"],
+    input[type="text"],
+    select {
+        width: calc(100% - 20px); /* Sesuaikan padding */
+    }
+    }
