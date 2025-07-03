@@ -1,64 +1,71 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full"> <!-- Tambah class="h-full" di sini -->
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mistry4Ever Store</title>
-    <!-- Memuat Tailwind CSS dari CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Memuat font Inter dari Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Menghubungkan ke file CSS kustom Anda -->
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Custom animations for better UI/UX */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        .animate-shake {
-            animation: shake 0.5s ease-in-out;
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .animate-popIn {
-            animation: popIn 0.3s ease-out forwards;
-        }
-
-        /* Custom scrollbar for better aesthetics */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #1f2937; /* bg-gray-800 */
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #8b5cf6; /* purple-500 */
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #a78bfa; /* purple-400 */
-        }
-    </style>
+    <title>Mistry4Ever Store - Top Up Game (FF & ML)</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="font-inter h-full bg-gradient-to-br from-purple-800 to-indigo-900"> <!-- Tambah class="h-full" dan background di sini -->
-    <!-- Div utama tempat aplikasi JavaScript akan dirender -->
-    <div id="app" class="h-full"></div> <!-- Tambah class="h-full" di sini -->
+<body>
+    <div class="container">
+        <h1>Mistry4Ever Store</h1>
+        <h2>Top Up Game</h2>
 
-    <!-- Memuat file JavaScript Anda -->
-    <script type="module" src="script.js"></script>
+        <div class="game-selection">
+            <button class="game-btn active" data-game="ml">Mobile Legends</button>
+            <button class="game-btn" data-game="ff">Free Fire</button>
+        </div>
+
+        <form id="topupForm">
+            <div class="form-group">
+                <label for="gameEmail">Email:</label>
+                <input type="email" id="gameEmail" required>
+            </div>
+
+            <div class="form-group">
+                <label for="gameId" id="gameIdLabel">ID Game:</label>
+                <input type="text" id="gameId" required>
+            </div>
+
+            <div class="form-group" id="serverIdGroup">
+                <label for="serverId">Server ID:</label>
+                <input type="text" id="serverId">
+            </div>
+
+            <div class="form-group">
+                <label for="diamondAmount">Pilih Diamond:</label>
+                <select id="diamondAmount" required>
+                    </select>
+            </div>
+
+            <div class="form-group">
+                <label for="totalPrice">Harga Akhir:</label>
+                <input type="text" id="totalPrice" class="price-display" readonly value="Rp 0">
+                <small>*Harga sudah termasuk pajak dan biaya admin.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Metode Pembayaran:</label>
+                <div class="payment-methods">
+                    <label>
+                        <input type="radio" name="paymentMethod" value="DANA" required> DANA
+                    </label>
+                    <label>
+                        <input type="radio" name="paymentMethod" value="GOPAY"> GOPAY
+                    </label>
+                    <label>
+                        <input type="radio" name="paymentMethod" value="OVO"> OVO
+                    </label>
+                    <label>
+                        <input type="radio" name="paymentMethod" value="QRIS"> QRIS
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" id="topupButton">Top Up Sekarang</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
 </body>
-</html>
+                    </html>
