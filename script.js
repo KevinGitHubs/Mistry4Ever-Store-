@@ -136,9 +136,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             updateDiamondOptions(); // Perbarui tampilan diamond untuk game yang dipilih
 
-            // Navigasi: Sembunyikan Game Selection, Tampilkan Form Top Up
-            gameSelectionSection.classList.remove('active');
-            topupFormSection.classList.add('active');
+            // Navigasi: Sembunyikan Game Selection, Tampilkan Form Top Up dengan transisi
+            gameSelectionSection.style.opacity = '0'; // Mulai fade out
+            setTimeout(() => {
+                gameSelectionSection.classList.remove('active');
+                gameSelectionSection.style.display = 'none'; // Sembunyikan setelah fade out
+
+                topupFormSection.style.display = 'block'; // Tampilkan secara instan tapi opacity 0
+                setTimeout(() => {
+                    topupFormSection.classList.add('active'); // Mulai fade in
+                }, 10); // Sedikit delay untuk memastikan display block diterapkan
+            }, 500); // Durasi fade out
         });
     });
 
@@ -192,15 +200,28 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Pesanan Anda akan dikirim ke WhatsApp. Mohon lanjutkan di sana.');
         topupForm.reset(); // Reset form setelah submit
         
-        // Setelah submit, kembali ke halaman pemilihan game
-        gameSelectionSection.classList.add('active');
-        topupFormSection.classList.remove('active');
+        // Setelah submit, kembali ke halaman pemilihan game dengan transisi
+        topupFormSection.style.opacity = '0'; // Mulai fade out
+        setTimeout(() => {
+            topupFormSection.classList.remove('active');
+            topupFormSection.style.display = 'none'; // Sembunyikan setelah fade out
+
+            gameSelectionSection.style.display = 'block'; // Tampilkan secara instan tapi opacity 0
+            setTimeout(() => {
+                gameSelectionSection.classList.add('active'); // Mulai fade in
+            }, 10); // Sedikit delay
+        }, 500); // Durasi fade out
+
         selectedGame = ''; // Reset game yang dipilih
         document.querySelectorAll('.game-btn').forEach(btn => btn.classList.remove('active')); // Hapus active dari tombol game
     });
 
     // Inisialisasi awal: hanya tampilkan bagian pemilihan game
+    // Pastikan gameSelectionSection terlihat dan topupFormSection tersembunyi
     gameSelectionSection.classList.add('active');
+    gameSelectionSection.style.opacity = '1';
     topupFormSection.classList.remove('active');
+    topupFormSection.style.display = 'none'; // Penting: pastikan tersembunyi di awal
+
     calculateTotalPrice(); // Set harga awal ke Rp 0
 });
