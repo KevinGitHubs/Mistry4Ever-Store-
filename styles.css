@@ -1,0 +1,25 @@
+/* styles.css */
+
+/*
+   Karena kita menggunakan Tailwind CSS dari CDN,
+   sebagian besar styling akan dilakukan melalui kelas Tailwind di HTML/JavaScript.
+   File ini bisa digunakan untuk CSS kustom tambahan jika diperlukan.
+*/
+
+/* Contoh: Menyesuaikan gaya dasar HTML/body jika tidak sepenuhnya ditangani oleh Tailwind */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Jika ada elemen yang membutuhkan gaya spesifik yang tidak ada di Tailwind */
+/* Misalnya, untuk memastikan tinggi minimum layar */
+#app {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Anda bisa menambahkan gaya lain di sini */
