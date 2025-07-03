@@ -1,22 +1,22 @@
 /* General Styling */
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #2c3e50, #34495e);
+    background: linear-gradient(135deg, #1a0a38, #300a64); /* Background gelap ungu-biru */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    color: #333;
+    color: #e0e0e0; /* Warna teks umum terang */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
-    background-color: #ffffff;
+    background-color: #2a1154; /* Background container sedikit lebih terang dari body */
     padding: 40px;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Bayangan lebih gelap */
     width: 100%;
     max-width: 550px;
     box-sizing: border-box;
@@ -28,15 +28,24 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+.section {
+    display: none; /* Sembunyikan semua section secara default */
+}
+
+.section.active {
+    display: block; /* Tampilkan section yang aktif */
+}
+
 /* Header Styling */
 .header {
     text-align: center;
     margin-bottom: 35px;
+    color: #f0f0f0;
 }
 
 .logo-icon {
     font-size: 3.5em;
-    color: #4CAF50;
+    color: #a76bff; /* Warna ikon cerah */
     margin-bottom: 10px;
     animation: bounceIn 1s ease-out;
 }
@@ -49,70 +58,87 @@ body {
 
 h1 {
     font-size: 2.5em;
-    color: #2c3e50;
+    color: #fff; /* Putih terang */
     margin-bottom: 5px;
     font-weight: 700;
 }
 
-h2 {
+.tagline {
     font-size: 1.1em;
-    color: #7f8c8d;
+    color: #bbb; /* Abu-abu terang */
     margin-top: 0;
     font-weight: 400;
 }
 
-.instruction {
+.instruction-main { /* Untuk "Pilih game untuk top-up:" */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    color: #f0f0f0;
+    font-weight: 600;
+}
+
+.instruction { /* Untuk "Pastikan User ID, Email, dan Anda benar." */
     text-align: center;
     margin-bottom: 20px;
     font-size: 0.95em;
-    color: #666;
-    background-color: #f8f9fa;
+    color: #bbb;
+    background-color: #3e226e; /* Latar belakang instruksi gelap */
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid #e9ecef;
+    border: 1px solid #4a2d7f;
 }
 
-/* Game Selection */
-.game-selection {
+/* Game Selection Grid */
+.game-selection-grid {
     display: flex;
-    justify-content: center;
-    gap: 15px;
+    flex-direction: column; /* Vertikal */
+    gap: 20px; /* Jarak antar tombol game */
     margin-bottom: 30px;
 }
 
 .game-btn {
-    background-color: #f8f9fa;
-    border: 2px solid #e9ecef;
-    padding: 12px 25px;
-    border-radius: 10px;
+    background-color: #6a1a7b; /* Default background gelap */
+    border: none;
+    padding: 25px; /* Padding lebih besar */
+    border-radius: 15px; /* Lebih membulat */
     cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 600;
-    color: #555;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: white;
     transition: all 0.3s ease;
     display: flex;
+    flex-direction: column; /* Konten di dalam tombol vertikal */
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
-.game-btn img {
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
+.game-btn[data-color="red"] {
+    background-color: #e74c3c; /* Merah untuk Free Fire */
+}
+
+.game-btn[data-color="blue"] {
+    background-color: #3498db; /* Biru untuk Mobile Legends */
 }
 
 .game-btn:hover {
-    background-color: #e2e6ea;
-    border-color: #d1d5da;
-    transform: translateY(-2px);
+    transform: translateY(-5px); /* Efek angkat lebih jelas */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
-.game-btn.active {
-    background-color: #4CAF50;
-    color: white;
-    border-color: #4CAF50;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
-    transform: translateY(-2px);
+.game-btn .logo-circle {
+    width: 80px; /* Ukuran lingkaran logo */
+    height: 80px;
+    background-color: rgba(255, 255, 255, 0.1); /* Background transparan untuk lingkaran */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8em; /* Ukuran teks "Logo" */
+    font-weight: 500;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Form Styling */
@@ -124,97 +150,107 @@ label {
     display: block;
     margin-bottom: 10px;
     font-weight: 600;
-    color: #444;
+    color: #f0f0f0; /* Teks label terang */
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
 label .fas, label .fab {
-    color: #4CAF50;
+    color: #a76bff; /* Warna ikon cerah */
     font-size: 1.1em;
 }
 
 input[type="email"],
-input[type="text"] { /* select dihilangkan dari sini */
+input[type="text"] {
     width: calc(100% - 24px);
     padding: 12px;
-    border: 1px solid #ced4da;
+    background-color: #3e226e; /* Background input gelap */
+    border: 1px solid #4a2d7f; /* Border input gelap */
     border-radius: 8px;
     font-size: 1em;
-    color: #495057;
+    color: #f0f0f0; /* Teks input terang */
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input[type="email"]:focus,
 input[type="text"]:focus {
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+    border-color: #a76bff; /* Border cerah saat fokus */
+    box-shadow: 0 0 0 0.2rem rgba(167, 107, 255, 0.25); /* Glow cerah */
     outline: none;
 }
 
-/* New Diamond Selection Grid */
+/* Diamond Selection Grid */
 .diamond-options-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Responsive grid */
-    gap: 15px; /* Jarak antar kartu diamond */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid, sedikit lebih kecil */
+    gap: 12px; /* Jarak antar kartu diamond */
     margin-top: 15px;
 }
 
 .diamond-card {
-    background-color: #2c3e50; /* Background gelap seperti gambar */
+    background-color: #3e226e; /* Background kartu diamond gelap */
     color: white;
     padding: 15px;
     border-radius: 10px;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    border: 2px solid transparent; /* Border default transparan */
+    border: 2px solid transparent;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center; /* Rata tengah konten vertikal */
     align-items: center;
-    min-height: 80px; /* Tinggi minimum untuk konsistensi */
+    min-height: 90px; /* Tinggi minimum untuk konsistensi */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .diamond-card:hover {
-    transform: translateY(-3px); /* Efek angkat saat hover */
+    transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .diamond-card.selected {
     border-color: #4CAF50; /* Border hijau saat terpilih */
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5); /* Glow hijau */
-    background-color: #3e5163; /* Sedikit lebih terang saat terpilih */
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+    background-color: #4a2d7f; /* Sedikit lebih terang saat terpilih */
 }
 
-.diamond-card .diamond-amount {
-    font-size: 1.2em;
-    font-weight: 600;
+.diamond-card .diamond-icon {
+    font-size: 1.8em; /* Ukuran ikon diamond */
+    color: #4CAF50; /* Warna hijau untuk ikon */
     margin-bottom: 5px;
 }
 
-.diamond-card .diamond-price {
+.diamond-card .diamond-amount {
     font-size: 1.1em;
+    font-weight: 600;
+    color: #f0f0f0;
+    margin-bottom: 3px;
+}
+
+.diamond-card .diamond-price {
+    font-size: 1em;
     font-weight: 700;
     color: #4CAF50; /* Harga hijau cerah */
 }
 
 /* Price Display */
 .price-summary {
-    background-color: #f0faf0;
-    border-left: 5px solid #4CAF50;
+    background-color: #3a256a; /* Latar belakang hijau muda gelap */
+    border-left: 5px solid #4CAF50; /* Border kiri hijau */
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 25px;
+    color: #f0f0f0;
 }
 
 .price-display {
-    background-color: #e0ffe0 !important;
+    background-color: #2e1a5a !important; /* Latar belakang input harga lebih gelap */
     font-weight: 700;
-    color: #28a745 !important;
+    color: #4CAF50 !important; /* Warna teks harga hijau terang */
     padding: 10px;
-    border: 1px solid #a8e6a8 !important;
+    border: 1px solid #4a2d7f !important;
     border-radius: 6px;
     text-align: center;
     font-size: 1.1em;
@@ -222,7 +258,7 @@ input[type="text"]:focus {
 
 small {
     font-size: 0.8em;
-    color: #6c757d;
+    color: #bbb;
     margin-top: 8px;
     display: block;
     text-align: right;
@@ -242,29 +278,30 @@ small {
     align-items: center;
     font-weight: normal;
     cursor: pointer;
-    background-color: #f1f3f5;
+    background-color: #3e226e; /* Latar belakang metode pembayaran gelap */
     padding: 10px 15px;
     border-radius: 8px;
-    border: 1px solid #e9ecef;
+    border: 1px solid #4a2d7f;
     transition: all 0.2s ease;
     min-width: 90px;
     justify-content: center;
+    color: #f0f0f0;
 }
 
 .payment-methods label:hover {
-    background-color: #e5e7e9;
-    border-color: #d8dbe0;
+    background-color: #4a2d7f;
+    border-color: #5b3992;
 }
 
 .payment-methods input[type="radio"] {
     margin-right: 8px;
     transform: scale(1.2);
-    accent-color: #4CAF50;
+    accent-color: #a76bff; /* Warna centang cerah */
 }
 
 /* Submit Button */
 button[type="submit"] {
-    background-color: #007bff;
+    background-color: #a76bff; /* Warna tombol submit cerah */
     color: white;
     padding: 15px 25px;
     border: none;
@@ -282,9 +319,9 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #8c4edd; /* Warna lebih gelap saat hover */
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 6px 20px rgba(167, 107, 255, 0.3);
 }
 
 button[type="submit"] .fas, button[type="submit"] .fab {
@@ -302,21 +339,25 @@ button[type="submit"] .fas, button[type="submit"] .fab {
         font-size: 2em;
     }
 
-    h2 {
+    .tagline, .instruction-main {
         font-size: 1em;
     }
 
-    .game-selection {
-        flex-direction: column;
-        gap: 10px;
+    .game-selection-grid {
+        gap: 15px;
     }
 
     .game-btn {
-        width: 100%;
-        justify-content: center;
+        font-size: 1.1em;
+        padding: 20px;
+    }
+
+    .logo-circle {
+        width: 70px;
+        height: 70px;
     }
 
     .diamond-options-grid {
         grid-template-columns: 1fr; /* Satu kolom di layar sangat kecil */
     }
-    }
+          }
