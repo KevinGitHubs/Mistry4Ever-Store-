@@ -4,48 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mistry4Ever Store - Top Up Game (FF & ML)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Mistry4Ever Store</h1>
-        <h2>Top Up Game</h2>
+        <div class="header">
+            <i class="fas fa-gem logo-icon"></i>
+            <h1>Mistry4Ever Store</h1>
+            <h2>Top Up Game Favoritmu!</h2>
+        </div>
 
         <div class="game-selection">
-            <button class="game-btn active" data-game="ml">Mobile Legends</button>
-            <button class="game-btn" data-game="ff">Free Fire</button>
+            <button class="game-btn active" data-game="ml">
+                <img src="https://cdngarenanow-a.akamaihd.net/games/MLBB/logo/MLBB_Icon.png" alt="Mobile Legends Logo">
+                Mobile Legends
+            </button>
+            <button class="game-btn" data-game="ff">
+                <img src="https://cdngarenanow-a.akamaihd.net/games/freefire/logo/ff_logo.png" alt="Free Fire Logo">
+                Free Fire
+            </button>
         </div>
 
         <form id="topupForm">
             <div class="form-group">
-                <label for="gameEmail">Email:</label>
-                <input type="email" id="gameEmail" required>
+                <label for="gameEmail"><i class="fas fa-envelope"></i> Email:</label>
+                <input type="email" id="gameEmail" placeholder="Masukkan Email Anda" required>
             </div>
 
             <div class="form-group">
-                <label for="gameId" id="gameIdLabel">ID Game:</label>
-                <input type="text" id="gameId" required>
+                <label for="gameId" id="gameIdLabel"><i class="fas fa-id-card"></i> ID Game:</label>
+                <input type="text" id="gameId" placeholder="Masukkan ID Game" required>
             </div>
 
             <div class="form-group" id="serverIdGroup">
-                <label for="serverId">Server ID:</label>
-                <input type="text" id="serverId">
+                <label for="serverId"><i class="fas fa-server"></i> Server ID:</label>
+                <input type="text" id="serverId" placeholder="Masukkan Server ID (contoh: 1234)" required>
             </div>
 
             <div class="form-group">
-                <label for="diamondAmount">Pilih Diamond:</label>
+                <label for="diamondAmount"><i class="fas fa-diamond"></i> Pilih Diamond:</label>
                 <select id="diamondAmount" required>
                     </select>
             </div>
 
-            <div class="form-group">
-                <label for="totalPrice">Harga Akhir:</label>
+            <div class="form-group price-summary">
+                <label for="totalPrice"><i class="fas fa-hand-holding-usd"></i> Harga Akhir:</label>
                 <input type="text" id="totalPrice" class="price-display" readonly value="Rp 0">
-                <small>*Harga sudah termasuk pajak dan biaya admin.</small>
+                <small>*Harga sudah termasuk pajak 11% dan biaya admin.</small>
             </div>
 
             <div class="form-group">
-                <label>Metode Pembayaran:</label>
+                <label><i class="fas fa-wallet"></i> Metode Pembayaran:</label>
                 <div class="payment-methods">
                     <label>
                         <input type="radio" name="paymentMethod" value="DANA" required> DANA
@@ -62,7 +73,7 @@
                 </div>
             </div>
 
-            <button type="submit" id="topupButton">Top Up Sekarang</button>
+            <button type="submit" id="topupButton"><i class="fab fa-whatsapp"></i> Top Up Sekarang</button>
         </form>
     </div>
 
