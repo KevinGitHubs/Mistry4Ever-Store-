@@ -201,26 +201,26 @@ function renderApp() {
     mainContainer.className = "min-h-full w-full flex items-center justify-center p-4";
     
     const contentBox = document.createElement('div');
-    // contentBox akan menjadi flex container dengan tinggi terbatas dan scrollable
-    // `flex-col` agar item di dalamnya tersusun vertikal
-    // `max-h-[calc(100vh-32px)]` membatasi tinggi maksimum kotak konten
-    // `overflow-y-auto custom-scrollbar` mengaktifkan scrolling
-    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col max-h-[calc(100vh-32px)] overflow-y-auto custom-scrollbar"; 
+    // Tambahkan z-index yang tinggi ke contentBox untuk memastikan di atas elemen lain
+    // Serta padding atas agar header dan tombol CS tidak terlalu mepet ke atas
+    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col max-h-[calc(100vh-32px)] overflow-y-auto custom-scrollbar z-20 pt-16"; 
 
     // Header Toko (dipindahkan ke dalam contentBox agar tetap di atas)
     const header = document.createElement('h1');
     header.className = "text-4xl font-extrabold text-center mb-6 text-purple-400 drop-shadow-lg";
     header.textContent = "Mistry4Ever Store";
+    // Header ditempatkan di dalam contentBox, tapi karena contentBox ada pt-16, ini akan memiliki ruang
     contentBox.appendChild(header);
 
     // Tombol CS WhatsApp (dipindahkan ke dalam contentBox agar posisinya relatif terhadapnya)
     // Sesuaikan `top` dan `right` untuk memberi jarak yang lebih baik dari judul
+    // Tambah z-index agar selalu di atas
     const whatsappLink = document.createElement('a');
     whatsappLink.href = `https://wa.me/${CS_PHONE_NUMBER}?text=${encodeURIComponent("Halo saya mempunyai keluhan")}`;
     whatsappLink.target = "_blank";
     whatsappLink.rel = "noopener noreferrer";
-    // Mengubah top-4 menjadi top-6 atau top-8 untuk memberi jarak lebih
-    whatsappLink.className = "absolute top-6 right-6 p-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-lg transition-colors z-10"; 
+    // Mengubah top-6 menjadi top-4, karena contentBox sudah ada pt-16, ini akan lebih pas
+    whatsappLink.className = "absolute top-4 right-6 p-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-lg transition-colors z-30"; 
     whatsappLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`;
     contentBox.appendChild(whatsappLink);
 
@@ -244,7 +244,8 @@ function renderApp() {
 function renderGameSelection(parentEl) {
     const gameSelectionDiv = document.createElement('div');
     // Tambah `flex-grow` agar div ini mengisi ruang di dalam contentBox dan memusatkan konten vertikal
-    gameSelectionDiv.className = "flex flex-col items-center justify-center flex-grow w-full text-center"; 
+    // Tambah z-index agar konten di dalamnya selalu di atas
+    gameSelectionDiv.className = "flex flex-col items-center justify-center flex-grow w-full text-center z-20"; 
 
     const promptText = document.createElement('p');
     promptText.className = "text-lg mb-6 text-gray-300";
@@ -252,7 +253,8 @@ function renderGameSelection(parentEl) {
     gameSelectionDiv.appendChild(promptText);
 
     const buttonContainer = document.createElement('div');
-    buttonContainer.className = "flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md";
+    // Tambah z-index pada container tombol
+    buttonContainer.className = "flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md z-20";
 
     // Free Fire Button (menggunakan simbol Gamepad)
     const ffButton = document.createElement('button');
