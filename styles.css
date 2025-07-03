@@ -1,26 +1,26 @@
 /* General Styling */
 body {
-    font-family: 'Poppins', sans-serif; /* Menggunakan font Poppins */
-    background: linear-gradient(135deg, #2c3e50, #34495e); /* Gradient background yang gelap dan modern */
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
     color: #333;
-    -webkit-font-smoothing: antialiased; /* Untuk teks lebih halus */
+    -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
-    background-color: #ffffff; /* Warna putih bersih untuk container */
+    background-color: #ffffff;
     padding: 40px;
-    border-radius: 15px; /* Sudut lebih membulat */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Bayangan lebih dramatis */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 550px; /* Lebar maksimum yang sedikit lebih besar */
-    box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
-    animation: fadeIn 0.8s ease-out; /* Animasi fade-in saat dimuat */
+    max-width: 550px;
+    box-sizing: border-box;
+    animation: fadeIn 0.8s ease-out;
 }
 
 @keyframes fadeIn {
@@ -35,8 +35,8 @@ body {
 }
 
 .logo-icon {
-    font-size: 3.5em; /* Ukuran ikon logo lebih besar */
-    color: #4CAF50; /* Warna hijau cerah */
+    font-size: 3.5em;
+    color: #4CAF50;
     margin-bottom: 10px;
     animation: bounceIn 1s ease-out;
 }
@@ -49,59 +49,70 @@ body {
 
 h1 {
     font-size: 2.5em;
-    color: #2c3e50; /* Warna gelap */
+    color: #2c3e50;
     margin-bottom: 5px;
-    font-weight: 700; /* Lebih tebal */
+    font-weight: 700;
 }
 
 h2 {
     font-size: 1.1em;
-    color: #7f8c8d; /* Abu-abu sedang */
+    color: #7f8c8d;
     margin-top: 0;
-    font-weight: 400; /* Normal */
+    font-weight: 400;
+}
+
+.instruction {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 0.95em;
+    color: #666;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
 }
 
 /* Game Selection */
 .game-selection {
     display: flex;
     justify-content: center;
-    gap: 15px; /* Jarak antar tombol game */
+    gap: 15px;
     margin-bottom: 30px;
 }
 
 .game-btn {
-    background-color: #f8f9fa; /* Latar belakang tombol netral */
-    border: 2px solid #e9ecef; /* Border yang sedikit lebih tebal */
+    background-color: #f8f9fa;
+    border: 2px solid #e9ecef;
     padding: 12px 25px;
-    border-radius: 10px; /* Lebih membulat */
+    border-radius: 10px;
     cursor: pointer;
     font-size: 1.1em;
-    font-weight: 600; /* Lebih tebal */
+    font-weight: 600;
     color: #555;
-    transition: all 0.3s ease; /* Transisi lebih halus */
-    display: flex; /* Untuk menempatkan gambar dan teks sejajar */
+    transition: all 0.3s ease;
+    display: flex;
     align-items: center;
-    gap: 10px; /* Jarak antara gambar dan teks */
+    gap: 10px;
 }
 
 .game-btn img {
-    width: 30px; /* Ukuran logo game */
+    width: 30px;
     height: 30px;
-    border-radius: 5px; /* Sedikit membulat pada gambar */
+    border-radius: 5px;
 }
 
 .game-btn:hover {
     background-color: #e2e6ea;
     border-color: #d1d5da;
-    transform: translateY(-2px); /* Efek angkat sedikit saat hover */
+    transform: translateY(-2px);
 }
 
 .game-btn.active {
-    background-color: #4CAF50; /* Warna hijau saat aktif */
+    background-color: #4CAF50;
     color: white;
     border-color: #4CAF50;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); /* Bayangan untuk tombol aktif */
-    transform: translateY(-2px); /* Tetap terangkat saat aktif */
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    transform: translateY(-2px);
 }
 
 /* Form Styling */
@@ -112,53 +123,98 @@ h2 {
 label {
     display: block;
     margin-bottom: 10px;
-    font-weight: 600; /* Lebih tebal */
+    font-weight: 600;
     color: #444;
-    display: flex; /* Untuk ikon sejajar dengan teks */
+    display: flex;
     align-items: center;
-    gap: 8px; /* Jarak antara ikon dan teks */
+    gap: 8px;
 }
 
 label .fas, label .fab {
-    color: #4CAF50; /* Warna ikon hijau */
+    color: #4CAF50;
     font-size: 1.1em;
 }
 
 input[type="email"],
-input[type="text"],
-select {
-    width: calc(100% - 24px); /* Sesuaikan dengan padding */
+input[type="text"] { /* select dihilangkan dari sini */
+    width: calc(100% - 24px);
     padding: 12px;
     border: 1px solid #ced4da;
-    border-radius: 8px; /* Lebih membulat */
+    border-radius: 8px;
     font-size: 1em;
     color: #495057;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input[type="email"]:focus,
-input[type="text"]:focus,
-select:focus {
-    border-color: #4CAF50; /* Border hijau saat fokus */
-    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25); /* Glow hijau */
+input[type="text"]:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
     outline: none;
+}
+
+/* New Diamond Selection Grid */
+.diamond-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Responsive grid */
+    gap: 15px; /* Jarak antar kartu diamond */
+    margin-top: 15px;
+}
+
+.diamond-card {
+    background-color: #2c3e50; /* Background gelap seperti gambar */
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent; /* Border default transparan */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 80px; /* Tinggi minimum untuk konsistensi */
+}
+
+.diamond-card:hover {
+    transform: translateY(-3px); /* Efek angkat saat hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.diamond-card.selected {
+    border-color: #4CAF50; /* Border hijau saat terpilih */
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5); /* Glow hijau */
+    background-color: #3e5163; /* Sedikit lebih terang saat terpilih */
+}
+
+.diamond-card .diamond-amount {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.diamond-card .diamond-price {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #4CAF50; /* Harga hijau cerah */
 }
 
 /* Price Display */
 .price-summary {
-    background-color: #f0faf0; /* Latar belakang hijau muda */
-    border-left: 5px solid #4CAF50; /* Border kiri hijau */
+    background-color: #f0faf0;
+    border-left: 5px solid #4CAF50;
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 25px;
 }
 
 .price-display {
-    background-color: #e0ffe0 !important; /* Latar belakang lebih terang */
-    font-weight: 700; /* Sangat tebal */
-    color: #28a745 !important; /* Warna teks hijau gelap */
+    background-color: #e0ffe0 !important;
+    font-weight: 700;
+    color: #28a745 !important;
     padding: 10px;
-    border: 1px solid #a8e6a8 !important; /* Border hijau muda */
+    border: 1px solid #a8e6a8 !important;
     border-radius: 6px;
     text-align: center;
     font-size: 1.1em;
@@ -166,7 +222,7 @@ select:focus {
 
 small {
     font-size: 0.8em;
-    color: #6c757d; /* Abu-abu gelap */
+    color: #6c757d;
     margin-top: 8px;
     display: block;
     text-align: right;
@@ -177,7 +233,7 @@ small {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    justify-content: center; /* Rata tengah */
+    justify-content: center;
     margin-top: 10px;
 }
 
@@ -186,13 +242,13 @@ small {
     align-items: center;
     font-weight: normal;
     cursor: pointer;
-    background-color: #f1f3f5; /* Latar belakang abu-abu muda */
+    background-color: #f1f3f5;
     padding: 10px 15px;
     border-radius: 8px;
     border: 1px solid #e9ecef;
     transition: all 0.2s ease;
-    min-width: 90px; /* Lebar minimum untuk konsistensi */
-    justify-content: center; /* Rata tengah teks dalam label */
+    min-width: 90px;
+    justify-content: center;
 }
 
 .payment-methods label:hover {
@@ -202,19 +258,19 @@ small {
 
 .payment-methods input[type="radio"] {
     margin-right: 8px;
-    transform: scale(1.2); /* Ukuran radio button lebih besar */
-    accent-color: #4CAF50; /* Warna centang hijau (modern browsers) */
+    transform: scale(1.2);
+    accent-color: #4CAF50;
 }
 
 /* Submit Button */
 button[type="submit"] {
-    background-color: #007bff; /* Warna biru cerah */
+    background-color: #007bff;
     color: white;
     padding: 15px 25px;
     border: none;
-    border-radius: 10px; /* Lebih membulat */
+    border-radius: 10px;
     font-size: 1.2em;
-    font-weight: 700; /* Sangat tebal */
+    font-weight: 700;
     cursor: pointer;
     width: 100%;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
@@ -226,9 +282,9 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3; /* Biru lebih gelap saat hover */
-    transform: translateY(-2px); /* Efek angkat */
-    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3); /* Bayangan saat hover */
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
 }
 
 button[type="submit"] .fas, button[type="submit"] .fab {
@@ -251,18 +307,16 @@ button[type="submit"] .fas, button[type="submit"] .fab {
     }
 
     .game-selection {
-        flex-direction: column; /* Tombol game bertumpuk di layar kecil */
+        flex-direction: column;
         gap: 10px;
     }
 
     .game-btn {
-        width: 100%; /* Lebar penuh */
-        justify-content: center; /* Rata tengah konten */
+        width: 100%;
+        justify-content: center;
     }
 
-    input[type="email"],
-    input[type="text"],
-    select {
-        width: calc(100% - 20px); /* Sesuaikan padding */
+    .diamond-options-grid {
+        grid-template-columns: 1fr; /* Satu kolom di layar sangat kecil */
     }
     }
