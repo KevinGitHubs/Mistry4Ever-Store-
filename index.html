@@ -13,70 +13,80 @@
         <div class="header">
             <i class="fas fa-gem logo-icon"></i>
             <h1>Mistry4Ever Store</h1>
-            <h2>Top Up Game Favoritmu!</h2>
+            <p class="tagline">Top Up Game Favoritmu!</p>
         </div>
 
-        <div class="game-selection">
-            <button class="game-btn active" data-game="ml">
-                <img src="https://cdngarenanow-a.akamaihd.net/games/MLBB/logo/MLBB_Icon.png" alt="Mobile Legends Logo">
-                Mobile Legends
-            </button>
-            <button class="game-btn" data-game="ff">
-                <img src="https://cdngarenanow-a.akamaihd.net/games/freefire/logo/ff_logo.png" alt="Free Fire Logo">
-                Free Fire
-            </button>
-        </div>
-
-        <form id="topupForm">
-            <div class="form-group">
-                <p class="instruction">Pastikan User ID, Email, dan Anda benar.</p> <label for="gameEmail"><i class="fas fa-envelope"></i> Email:</label>
-                <input type="email" id="gameEmail" placeholder="Masukkan Email Anda" required>
-            </div>
-
-            <div class="form-group">
-                <label for="gameId" id="gameIdLabel"><i class="fas fa-id-card"></i> ID Game:</label>
-                <input type="text" id="gameId" placeholder="Masukkan ID Game" required>
-            </div>
-
-            <div class="form-group" id="serverIdGroup">
-                <label for="serverId"><i class="fas fa-server"></i> Server ID:</label>
-                <input type="text" id="serverId" placeholder="Masukkan Server ID (contoh: 1234)" required>
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-diamond"></i> Pilih Paket Diamond:</label>
-                <div class="diamond-options-grid" id="diamondOptionsContainer">
+        <div id="gameSelectionSection" class="section active">
+            <p class="instruction-main">Pilih game untuk top-up:</p>
+            <div class="game-selection-grid">
+                <button class="game-btn" data-game="ff" data-color="red">
+                    <div class="logo-circle">
+                        Free Fire<br>Logo
                     </div>
+                    Free Fire
+                </button>
+                <button class="game-btn" data-game="ml" data-color="blue">
+                    <div class="logo-circle">
+                        </div>
+                    Mobile Legends
+                </button>
             </div>
+        </div>
 
-            <div class="form-group price-summary">
-                <label for="totalPrice"><i class="fas fa-hand-holding-usd"></i> Harga Akhir:</label>
-                <input type="text" id="totalPrice" class="price-display" readonly value="Rp 0">
-                <small>*Harga sudah termasuk pajak 11% dan biaya admin.</small>
-            </div>
+        <div id="topupFormSection" class="section">
+            <p class="instruction">Pastikan User ID, Email, dan Anda benar.</p>
 
-            <div class="form-group">
-                <label><i class="fas fa-wallet"></i> Metode Pembayaran:</label>
-                <div class="payment-methods">
-                    <label>
-                        <input type="radio" name="paymentMethod" value="DANA" required> DANA
-                    </label>
-                    <label>
-                        <input type="radio" name="paymentMethod" value="GOPAY"> GOPAY
-                    </label>
-                    <label>
-                        <input type="radio" name="paymentMethod" value="OVO"> OVO
-                    </label>
-                    <label>
-                        <input type="radio" name="paymentMethod" value="QRIS"> QRIS
-                    </label>
+            <form id="topupForm">
+                <div class="form-group">
+                    <label for="gameEmail"><i class="fas fa-envelope"></i> Email:</label>
+                    <input type="email" id="gameEmail" placeholder="Masukkan Email Anda" required>
                 </div>
-            </div>
 
-            <button type="submit" id="topupButton"><i class="fab fa-whatsapp"></i> Top Up Sekarang</button>
-        </form>
+                <div class="form-group">
+                    <label for="gameId" id="gameIdLabel"><i class="fas fa-id-card"></i> ID Game:</label>
+                    <input type="text" id="gameId" placeholder="Masukkan ID Game" required>
+                </div>
+
+                <div class="form-group" id="serverIdGroup">
+                    <label for="serverId"><i class="fas fa-server"></i> Server ID:</label>
+                    <input type="text" id="serverId" placeholder="Masukkan Server ID (contoh: 1234)" required>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-gem"></i> Pilih Paket Diamond:</label>
+                    <div class="diamond-options-grid" id="diamondOptionsContainer">
+                        </div>
+                </div>
+
+                <div class="form-group price-summary">
+                    <label for="totalPrice"><i class="fas fa-hand-holding-usd"></i> Harga Akhir:</label>
+                    <input type="text" id="totalPrice" class="price-display" readonly value="Rp 0">
+                    <small>*Harga sudah termasuk pajak 11% dan biaya admin.</small>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-wallet"></i> Metode Pembayaran:</label>
+                    <div class="payment-methods">
+                        <label>
+                            <input type="radio" name="paymentMethod" value="DANA" required> DANA
+                        </label>
+                        <label>
+                            <input type="radio" name="paymentMethod" value="GOPAY"> GOPAY
+                        </label>
+                        <label>
+                            <input type="radio" name="paymentMethod" value="OVO"> OVO
+                        </label>
+                        <label>
+                            <input type="radio" name="paymentMethod" value="QRIS"> QRIS
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" id="topupButton"><i class="fab fa-whatsapp"></i> Top Up Sekarang</button>
+            </form>
+        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
-                </html>
+    </html>
