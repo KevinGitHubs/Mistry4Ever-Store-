@@ -26,45 +26,55 @@ let db;
 let auth;
 let currentUserId = null;
 let firebaseInitialized = false; // Status untuk melacak inisialisasi Firebase
+let authListenerUnsubscribe = null; // Untuk membersihkan listener auth
 
 // Inisialisasi Firebase di awal
-try {
-    if (firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId) {
-        app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        auth = getAuth(app);
-        firebaseInitialized = true;
-        console.log("Firebase initialized successfully!");
+function initializeFirebase() {
+    try {
+        if (firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId) {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            firebaseInitialized = true;
+            console.log("Firebase initialized successfully!");
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUserId = user.uid;
-                console.log("User authenticated:", currentUserId);
-            } else {
-                try {
-                    await signInAnonymously(auth);
-                    currentUserId = auth.currentUser.uid;
-                    console.log("Signed in anonymously:", currentUserId);
-                } catch (error) {
-                    console.error("Firebase anonymous sign-in failed:", error);
-                    currentUserId = null;
-                    // Tampilkan pesan error jika autentikasi anonim gagal
-                    transactionStatus = 'error';
-                    message = 'Gagal mengautentikasi pengguna. Silakan coba lagi.';
-                }
+            // Hapus listener sebelumnya jika ada
+            if (authListenerUnsubscribe) {
+                authListenerUnsubscribe();
             }
-            renderApp(); // Render ulang setelah auth siap
-        });
-    } else {
-        console.error("Firebase configuration is incomplete. Please check your firebaseConfig object in script.js.");
+
+            authListenerUnsubscribe = onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUserId = user.uid;
+                    console.log("User authenticated:", currentUserId);
+                } else {
+                    try {
+                        await signInAnonymously(auth);
+                        currentUserId = auth.currentUser.uid;
+                        console.log("Signed in anonymously:", currentUserId);
+                    } catch (error) {
+                        console.error("Firebase anonymous sign-in failed:", error);
+                        currentUserId = null;
+                        transactionStatus = 'error';
+                        message = 'Gagal mengautentikasi pengguna. Pastikan aturan keamanan Firebase mengizinkan autentikasi anonim. Detail: ' + error.message;
+                    }
+                }
+                renderApp(); // Render ulang setelah auth siap
+            });
+        } else {
+            console.error("Firebase configuration is incomplete. Please check your firebaseConfig object in script.js.");
+            transactionStatus = 'error';
+            message = 'Konfigurasi Firebase tidak lengkap. Aplikasi tidak dapat terhubung ke database.';
+            renderApp(); // Tetap render untuk menampilkan error
+        }
+    } catch (e) {
+        console.error("Firebase initialization failed:", e);
         transactionStatus = 'error';
-        message = 'Konfigurasi Firebase tidak lengkap. Aplikasi tidak dapat terhubung ke database.';
+        message = 'Gagal menginisialisasi Firebase. Periksa koneksi atau konfigurasi Anda. Detail: ' + e.message;
+        renderApp(); // Tetap render untuk menampilkan error
     }
-} catch (e) {
-    console.error("Firebase initialization failed:", e);
-    transactionStatus = 'error';
-    message = 'Gagal menginisialisasi Firebase. Periksa koneksi atau konfigurasi Anda.';
 }
+
 
 // --- Data Game ---
 const gameData = {
@@ -189,12 +199,13 @@ function renderApp() {
     clearAppRoot();
 
     const mainContainer = document.createElement('div');
-    mainContainer.className = "min-h-screen bg-gradient-to-br from-purple-800 to-indigo-900 text-white font-inter p-4 flex items-center justify-center";
+    // mainContainer sekarang mengambil tinggi penuh dari #app (yang sudah h-full)
+    mainContainer.className = "min-h-full w-full flex items-center justify-center p-4"; // min-h-full bukan min-h-screen lagi
     
     const contentBox = document.createElement('div');
-    // Untuk memastikan contentBox mengambil tinggi penuh jika hanya ada pemilihan game
-    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col"; // Tambah flex flex-col
-    
+    // flex-grow agar contentBox mengisi ruang di dalam mainContainer
+    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col min-h-[calc(100vh-32px)]"; // min-h-[calc(100vh-32px)] untuk memastikan tinggi minimal pada mobile
+
     // Header Toko (dipindahkan ke dalam contentBox agar tetap di atas)
     const header = document.createElement('h1');
     header.className = "text-4xl font-extrabold text-center mb-6 text-purple-400 drop-shadow-lg";
@@ -229,8 +240,8 @@ function renderApp() {
 // Fungsi untuk merender bagian pemilihan game
 function renderGameSelection(parentEl) {
     const gameSelectionDiv = document.createElement('div');
-    // Membuat bagian pemilihan game menjadi full screen di dalam contentBox
-    gameSelectionDiv.className = "flex flex-col items-center justify-center flex-grow w-full text-center"; // Menggunakan flex-grow agar mengisi sisa ruang vertikal
+    // Menggunakan flex-grow untuk mengisi sisa ruang vertikal di dalam contentBox
+    gameSelectionDiv.className = "flex flex-col items-center justify-center flex-grow w-full text-center"; 
 
     const promptText = document.createElement('p');
     promptText.className = "text-lg mb-6 text-gray-300";
@@ -240,20 +251,18 @@ function renderGameSelection(parentEl) {
     const buttonContainer = document.createElement('div');
     buttonContainer.className = "flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md";
 
-    // Free Fire Button
+    // Free Fire Button (kembali ke simbol Gamepad)
     const ffButton = document.createElement('button');
     ffButton.onclick = () => { selectedGame = "Free Fire"; resetFormState(); renderApp(); };
     ffButton.className = "flex flex-col items-center justify-center p-6 bg-red-600 hover:bg-red-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 flex-1";
-    // Menggunakan gambar yang diunggah
-    ffButton.innerHTML = `<img src="now-gg-1398-free-fire-icon-filled-256.webp" alt="Free Fire Logo" class="w-24 h-24 mb-2 rounded-full object-cover border-2 border-red-400"/> <span class="text-xl font-semibold">Free Fire</span>`;
+    ffButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad mb-2 text-white"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><path d="M6 12v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path><path d="M12 18v4"></path><path d="M17 21h-2"></path><path d="M7 21h2"></path><path d="M12 12h.01"></path><path d="M12 12v.01"></path></svg><span class="text-xl font-semibold">Free Fire</span>`;
     buttonContainer.appendChild(ffButton);
 
-    // Mobile Legends Button
+    // Mobile Legends Button (kembali ke simbol Gamepad)
     const mlButton = document.createElement('button');
     mlButton.onclick = () => { selectedGame = "Mobile Legends"; resetFormState(); renderApp(); };
     mlButton.className = "flex flex-col items-center justify-center p-6 bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 flex-1";
-    // Menggunakan gambar yang diunggah
-    mlButton.innerHTML = `<img src="IMG_20250703_103319.jpg" alt="Mobile Legends Logo" class="w-24 h-24 mb-2 rounded-full object-cover border-2 border-blue-400"/> <span class="text-xl font-semibold">Mobile Legends</span>`;
+    mlButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad mb-2 text-white"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><path d="M6 12v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path><path d="M12 18v4"></path><path d="M17 21h-2"></path><path d="M7 21h2"></path><path d="M12 12h.01"></path><path d="M12 12v.01"></path></svg><span class="text-xl font-semibold">Mobile Legends</span>`;
     buttonContainer.appendChild(mlButton);
 
     gameSelectionDiv.appendChild(buttonContainer);
@@ -263,7 +272,7 @@ function renderGameSelection(parentEl) {
 // Fungsi untuk merender form top-up
 function renderTopUpForm(parentEl) {
     const formDiv = document.createElement('div');
-    formDiv.className = "flex-grow"; // Agar form mengisi sisa ruang vertikal
+    formDiv.className = "flex-grow custom-scrollbar overflow-y-auto"; // Tambah custom-scrollbar dan overflow-y-auto
 
     const headerContainer = document.createElement('div');
     headerContainer.className = "flex items-center justify-between mb-6";
@@ -293,7 +302,6 @@ function renderTopUpForm(parentEl) {
         <input type="email" id="userEmail" value="${userEmail}" placeholder="Masukkan Email Anda" class="w-full p-3 rounded-md bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors mb-4" required>
     `;
     const emailInput = emailDiv.querySelector('#userEmail');
-    // HANYA update state, TIDAK re-render langsung di oninput untuk menghindari hilangnya fokus
     emailInput.oninput = (e) => { userEmail = e.target.value; updateSummary(); };
     formDiv.appendChild(emailDiv);
 
@@ -305,15 +313,13 @@ function renderTopUpForm(parentEl) {
         <input type="text" id="userId" value="${userId}" placeholder="${selectedGame === "Free Fire" ? "Masukkan Player ID Anda" : "Masukkan User ID Anda"}" class="w-full p-3 rounded-md bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors mb-4">
     `;
     const userIdInput = userIdDiv.querySelector('#userId');
-    // HANYA update state, TIDAK re-render langsung di oninput untuk menghindari hilangnya fokus
     userIdInput.oninput = (e) => {
         if (selectedGame === "Free Fire") {
-            userId = e.target.value; // Tidak ada filter angka untuk FF
+            userId = e.target.value;
         } else {
-            userId = e.target.value.replace(/\D/g, ''); // Hanya angka untuk ML
-            // Tidak perlu fokus otomatis di sini, biarkan pengguna selesai mengetik ID
+            userId = e.target.value.replace(/\D/g, '');
         }
-        updateSummary(); // Update ringkasan tanpa re-render penuh
+        updateSummary();
     };
     formDiv.appendChild(userIdDiv);
 
@@ -331,12 +337,10 @@ function renderTopUpForm(parentEl) {
             </div>
         `;
         const zoneIdInput = zoneIdDiv.querySelector('#zoneId');
-        // HANYA update state, TIDAK re-render langsung di oninput untuk menghindari hilangnya fokus
         zoneIdInput.oninput = (e) => { zoneId = e.target.value.replace(/\D/g, ''); updateSummary(); };
         formDiv.appendChild(zoneIdDiv);
     }
 
-    // Validasi input (akan dirender ulang setiap kali updateSummary dipanggil)
     const validationMsgContainerId = 'validation-message-container';
     let validationMsgContainer = formDiv.querySelector(`#${validationMsgContainerId}`);
     if (!validationMsgContainer) {
@@ -356,7 +360,7 @@ function renderTopUpForm(parentEl) {
 
     gameData[selectedGame].forEach(item => {
         const itemButton = document.createElement('button');
-        itemButton.onclick = () => { selectedItem = item; updateSummary(); }; // Update ringkasan
+        itemButton.onclick = () => { selectedItem = item; updateSummary(); };
         let iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-diamond text-blue-400 mr-3"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.4L7 18.7c.92.92 2.22 1.4 3.54 1.38h.04c1.32.02 2.62-.46 3.54-1.38l4.3-4.3a2.41 2.41 0 0 0 0-3.4L17 5.3c-.92-.92-2.22-1.4-3.54-1.38h-.04c-1.32-.02-2.62.46-3.54 1.38z"></path><path d="M7 18.7 17 5.3"></path><path d="M17 18.7 7 5.3"></path></svg>`;
         if (item.type === "pass") {
             iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar text-yellow-400 mr-3"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>`;
@@ -384,7 +388,7 @@ function renderTopUpForm(parentEl) {
     paymentMethods.forEach(method => {
         const methodButton = document.createElement('button');
         const isDisabled = method.isUnderMaintenance || (selectedItem && selectedItem.restrictedPaymentMethods && selectedItem.restrictedPaymentMethods.includes(method.id));
-        methodButton.onclick = () => { if (!isDisabled) { selectedPaymentMethod = method; updateSummary(); } }; // Update ringkasan
+        methodButton.onclick = () => { if (!isDisabled) { selectedPaymentMethod = method; updateSummary(); } };
         methodButton.disabled = isDisabled;
         methodButton.className = `flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all duration-200 ease-in-out ${selectedPaymentMethod?.id === method.id ? 'border-purple-500 bg-purple-900 shadow-lg' : 'border-gray-700 bg-gray-800 hover:border-purple-600 hover:bg-gray-700'} ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`;
         methodButton.innerHTML = `
@@ -410,7 +414,7 @@ function renderTopUpForm(parentEl) {
     // Tombol Top-Up
     const topUpButton = document.createElement('button');
     topUpButton.onclick = handleTopUp;
-    const isTopUpDisabled = !userId || !userEmail || !selectedItem || !selectedPaymentMethod || selectedPaymentMethod.isUnderMaintenance || (selectedItem && selectedItem.restrictedPaymentMethods && selectedItem.restrictedPaymentMethods.includes(selectedPaymentMethod.id)) || (selectedGame === "Mobile Legends" && !zoneId) || !firebaseInitialized || !currentUserId; // Tambah cek firebaseInitialized dan currentUserId
+    const isTopUpDisabled = !userId || !userEmail || !selectedItem || !selectedPaymentMethod || selectedPaymentMethod.isUnderMaintenance || (selectedItem && selectedItem.restrictedPaymentMethods && selectedItem.restrictedPaymentMethods.includes(selectedPaymentMethod.id)) || (selectedGame === "Mobile Legends" && !zoneId) || !firebaseInitialized || !currentUserId;
     topUpButton.disabled = isTopUpDisabled;
     topUpButton.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out ${isTopUpDisabled ? 'bg-gray-600 cursor-not-allowed opacity-70' : 'bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-opacity-50'}`;
     topUpButton.textContent = "Top Up Sekarang!";
@@ -424,7 +428,7 @@ function updateSummary() {
     const summaryContainer = document.getElementById('order-summary-container');
     const validationMsgContainer = document.getElementById('validation-message-container');
 
-    if (!summaryContainer) return; // Pastikan kontainer ada
+    if (!summaryContainer) return;
 
     const isSummaryVisible = selectedItem && selectedPaymentMethod && userId && userEmail && (selectedGame === "Free Fire" || (selectedGame === "Mobile Legends" && zoneId));
 
@@ -453,14 +457,12 @@ function updateSummary() {
             </div>
         `;
     } else {
-        summaryContainer.innerHTML = ''; // Sembunyikan ringkasan jika tidak lengkap
+        summaryContainer.innerHTML = '';
         summaryContainer.className = '';
     }
 
-    // Perbarui pesan validasi
     updateValidationMessage(validationMsgContainer);
 
-    // Perbarui status tombol Top Up
     const topUpButton = document.querySelector('button.w-full.py-4');
     if (topUpButton) {
         const isTopUpDisabled = !userId || !userEmail || !selectedItem || !selectedPaymentMethod || selectedPaymentMethod.isUnderMaintenance || (selectedItem && selectedItem.restrictedPaymentMethods && selectedItem.restrictedPaymentMethods.includes(selectedPaymentMethod.id)) || (selectedGame === "Mobile Legends" && !zoneId) || !firebaseInitialized || !currentUserId;
@@ -511,7 +513,6 @@ function renderErrorModal(parentEl) {
 
 // --- Event Handlers ---
 async function handleTopUp() {
-    // Validasi input
     if (!userId || !userEmail || !selectedItem || !selectedPaymentMethod) {
         transactionStatus = 'error';
         message = 'Mohon lengkapi User ID, Email, pilih paket, dan metode pembayaran.';
@@ -533,8 +534,6 @@ async function handleTopUp() {
         return;
     }
 
-    // Tambahan cek inisialisasi Firebase dan user ID
-    // Ini penting karena operasi Firestore memerlukan inisialisasi dan user terautentikasi
     if (!firebaseInitialized || !db || !auth || !currentUserId) {
         transactionStatus = 'error';
         message = 'Aplikasi tidak terhubung ke database atau pengguna tidak terautentikasi. Silakan coba lagi.';
@@ -543,7 +542,7 @@ async function handleTopUp() {
     }
 
     const finalPrice = calculateFinalPrice();
-    const appIdFromConfig = firebaseConfig.appId; // Ambil appId dari config
+    const appIdFromConfig = firebaseConfig.appId;
 
     try {
         await addDoc(collection(db, `artifacts/${appIdFromConfig}/public/data/transactions`), {
@@ -581,13 +580,13 @@ ${selectedGame === "Mobile Legends" ? `📋Server ID : ${zoneId}` : ''}
     } catch (error) {
         console.error("Error adding transaction or redirecting:", error);
         transactionStatus = 'error';
-        message = 'Gagal memproses transaksi. Silakan coba lagi. Detail: ' + error.message; // Tampilkan detail error
+        message = 'Gagal memproses transaksi. Silakan coba lagi. Detail: ' + error.message;
         renderApp();
     }
 }
 
 function resetFormState() {
-    selectedGame = null; // Reset game selection
+    selectedGame = null;
     userId = '';
     zoneId = '';
     userEmail = '';
@@ -604,6 +603,4 @@ function closeModal() {
 }
 
 // --- Initial Render ---
-// Render aplikasi saat DOM sudah siap
-document.addEventListener('DOMContentLoaded', renderApp);
-    
+document.addEventListener('DOMContentLoaded', initializeFirebase); // Panggil initializeFirebase saat DOM siap
