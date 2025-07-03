@@ -16,7 +16,8 @@ const firebaseConfig = {
     measurementId: "G-N0VGECPQB8"
 };
 
-const CS_PHONE_NUMBER = "6288218776877"; // Nomor WA CS
+// Hapus CS_PHONE_NUMBER karena tombol CS dihapus
+// const CS_PHONE_NUMBER = "6288218776877"; // Nomor WA CS
 const ADMIN_FEE = 2000;
 const TAX_RATE = 0.11;
 
@@ -195,6 +196,7 @@ function clearAppRoot() {
 
 // Fungsi utama untuk merender seluruh aplikasi
 function renderApp() {
+    console.log("renderApp called. Current selectedGame:", selectedGame); // Diagnostik
     clearAppRoot(); // Bersihkan root sebelum merender ulang
 
     const mainContainer = document.createElement('div');
@@ -203,27 +205,23 @@ function renderApp() {
     
     const contentBox = document.createElement('div');
     // Tambahkan z-index yang tinggi ke contentBox untuk memastikan di atas elemen lain
-    // Serta padding atas agar header dan tombol CS tidak terlalu mepet ke atas
+    // Serta padding atas agar header memiliki ruang yang cukup
     contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col max-h-[calc(100vh-32px)] overflow-y-auto custom-scrollbar z-[9998] pt-16"; 
 
     // Header Toko (dipindahkan ke dalam contentBox agar tetap di atas)
     const header = document.createElement('h1');
     header.className = "text-4xl font-extrabold text-center mb-6 text-purple-400 drop-shadow-lg";
     header.textContent = "Mistry4Ever Store";
-    // Header ditempatkan di dalam contentBox, tapi karena contentBox ada pt-16, ini akan memiliki ruang
     contentBox.appendChild(header);
 
-    // Tombol CS WhatsApp (dipindahkan ke dalam contentBox agar posisinya relatif terhadapnya)
-    // Sesuaikan `top` dan `right` untuk memberi jarak yang lebih baik dari judul
-    // Tambah z-index agar selalu di atas
-    const whatsappLink = document.createElement('a');
-    whatsappLink.href = `https://wa.me/${CS_PHONE_NUMBER}?text=${encodeURIComponent("Halo saya mempunyai keluhan")}`;
-    whatsappLink.target = "_blank";
-    whatsappLink.rel = "noopener noreferrer";
-    // Mengubah top-6 menjadi top-4, karena contentBox sudah ada pt-16, ini akan lebih pas
-    whatsappLink.className = "absolute top-4 right-6 p-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-lg transition-colors z-[9999]"; 
-    whatsappLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`;
-    contentBox.appendChild(whatsappLink);
+    // Hapus Tombol CS WhatsApp
+    // const whatsappLink = document.createElement('a');
+    // whatsappLink.href = `https://wa.me/${CS_PHONE_NUMBER}?text=${encodeURIComponent("Halo saya mempunyai keluhan")}`;
+    // whatsappLink.target = "_blank";
+    // whatsappLink.rel = "noopener noreferrer";
+    // whatsappLink.className = "absolute top-4 right-6 p-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white shadow-lg transition-colors z-[9999]"; 
+    // whatsappLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>`;
+    // contentBox.appendChild(whatsappLink);
 
 
     if (!selectedGame) {
@@ -243,6 +241,7 @@ function renderApp() {
 
 // Fungsi untuk merender bagian pemilihan game
 function renderGameSelection(parentEl) {
+    console.log("renderGameSelection called."); // Diagnostik
     const gameSelectionDiv = document.createElement('div');
     // Tambah `flex-grow` agar div ini mengisi ruang di dalam contentBox dan memusatkan konten vertikal
     // Tambah z-index agar konten di dalamnya selalu di atas
@@ -264,9 +263,9 @@ function renderGameSelection(parentEl) {
     ffButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad mb-2 text-white"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><path d="M6 12v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path><path d="M12 18v4"></path><path d="M17 21h-2"></path><path d="M7 21h2"></path><path d="M12 12h.01"></path><path d="M12 12v.01"></path></svg><span class="text-xl font-semibold">Free Fire</span>`;
     // Attach event listener using addEventListener
     ffButton.addEventListener('click', () => {
-        console.log("Free Fire button clicked!"); // Diagnostik: Periksa konsol browser
+        console.log("Free Fire button clicked! Changing selectedGame to 'Free Fire'."); // Diagnostik
         selectedGame = "Free Fire";
-        resetFormState();
+        resetFormState(); // Reset state form, tapi jangan reset selectedGame
         renderApp();
     });
     buttonContainer.appendChild(ffButton);
@@ -278,9 +277,9 @@ function renderGameSelection(parentEl) {
     mlButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad mb-2 text-white"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><path d="M6 12v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path><path d="M12 18v4"></path><path d="M17 21h-2"></path><path d="M7 21h2"></path><path d="M12 12h.01"></path><path d="M12 12v.01"></path></svg><span class="text-xl font-semibold">Mobile Legends</span>`;
     // Attach event listener using addEventListener
     mlButton.addEventListener('click', () => {
-        console.log("Mobile Legends button clicked!"); // Diagnostik: Periksa konsol browser
+        console.log("Mobile Legends button clicked! Changing selectedGame to 'Mobile Legends'."); // Diagnostik
         selectedGame = "Mobile Legends";
-        resetFormState();
+        resetFormState(); // Reset state form, tapi jangan reset selectedGame
         renderApp();
     });
     buttonContainer.appendChild(mlButton);
@@ -291,10 +290,8 @@ function renderGameSelection(parentEl) {
 
 // Fungsi untuk merender form top-up
 function renderTopUpForm(parentEl) {
+    console.log("renderTopUpForm called. selectedGame is:", selectedGame); // Diagnostik
     const formDiv = document.createElement('div');
-    // formDiv sekarang akan menjadi flex container yang mengisi sisa ruang
-    // `flex-grow` membuatnya mengisi ruang yang tersedia
-    // `overflow-y-auto custom-scrollbar` dipindahkan ke contentBox
     formDiv.className = "flex flex-col flex-grow";
 
     const headerContainer = document.createElement('div');
@@ -305,9 +302,14 @@ function renderTopUpForm(parentEl) {
     headerContainer.appendChild(title);
 
     const changeGameButton = document.createElement('button');
-    changeGameButton.className = "px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-md text-sm font-medium transition-colors";
+    changeGameButton.className = "px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-md text-sm font-medium transition-colors cursor-pointer";
     changeGameButton.textContent = "Ganti Game";
-    changeGameButton.addEventListener('click', () => { selectedGame = null; resetFormState(); renderApp(); });
+    changeGameButton.addEventListener('click', () => {
+        console.log("Change Game button clicked!"); // Diagnostik
+        selectedGame = null; // Set selectedGame ke null untuk kembali ke pilihan game
+        resetFormState();
+        renderApp();
+    });
     headerContainer.appendChild(changeGameButton);
     formDiv.appendChild(headerContainer);
 
@@ -354,7 +356,7 @@ function renderTopUpForm(parentEl) {
             <label for="zoneId" class="block text-lg font-medium text-gray-300 mb-2">Zone ID (Server ID):</label>
             <div class="flex items-center gap-2">
                 <input type="text" id="zoneId" value="${zoneId}" placeholder="Masukkan Zone ID Anda (misal: 1234)" class="flex-grow p-3 rounded-md bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors">
-                <button title="Klik untuk melihat cara menemukan ID Anda" class="p-3 bg-gray-700 hover:bg-gray-600 rounded-md">
+                <button title="Klik untuk melihat cara menemukan ID Anda" class="p-3 bg-gray-700 hover:bg-gray-600 rounded-md cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-help-circle text-gray-300"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
                 </button>
             </div>
@@ -524,7 +526,7 @@ function renderErrorModal(parentEl) {
     modalContent.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-circle text-red-500 mx-auto mb-4 animate-shake"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>
         <p class="text-xl font-semibold mb-4">${message}</p>
-        <button id="closeModalBtn" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-md text-white font-medium transition-colors">Tutup</button>
+        <button id="closeModalBtn" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-md text-white font-medium transition-colors cursor-pointer">Tutup</button>
     `;
     
     modalContent.querySelector('#closeModalBtn').addEventListener('click', closeModal);
@@ -593,13 +595,19 @@ ${selectedGame === "Mobile Legends" ? `📋Server ID : ${zoneId}` : ''}
 📪Metode : ${selectedPaymentMethod.name}
         `.trim();
 
-        const whatsappUrl = `https://wa.me/${CS_PHONE_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
-        window.open(whatsappUrl, '_blank');
+        // Hapus pengiriman ke WhatsApp karena tombol CS dihapus
+        // const whatsappUrl = `https://wa.me/${CS_PHONE_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
+        // window.open(whatsappUrl, '_blank');
+
+        // Sebagai gantinya, tampilkan modal sukses atau pesan di UI
+        transactionStatus = 'success'; // Tambahkan status sukses
+        message = 'Transaksi berhasil disimpan! Anda bisa menghubungi CS secara manual jika perlu.'; // Pesan sukses
+        renderApp(); // Render ulang untuk menampilkan modal sukses
 
         setTimeout(() => {
             resetFormState();
             renderApp();
-        }, 1000);
+        }, 3000); // Tunda reset form agar modal terlihat
 
     } catch (error) {
         // Tangani error jika addDoc gagal
@@ -611,7 +619,8 @@ ${selectedGame === "Mobile Legends" ? `📋Server ID : ${zoneId}` : ''}
 }
 
 function resetFormState() {
-    selectedGame = null;
+    // selectedGame tidak direset di sini agar bisa kembali ke pemilihan game
+    // selectedGame = null;
     userId = '';
     zoneId = '';
     userEmail = '';
@@ -630,3 +639,4 @@ function closeModal() {
 // --- Initial Render ---
 // Panggil initializeFirebase saat DOM sudah siap
 document.addEventListener('DOMContentLoaded', initializeFirebase);
+.
