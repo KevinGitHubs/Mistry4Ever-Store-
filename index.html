@@ -3,87 +3,636 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mistry4Ever Store - Top Up Game (FF & ML)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css"> </head>
+    <title>Mistry4Ever Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
     <div class="container">
+        <!-- Header Section -->
         <div class="header">
-            <i class="fas fa-gem logo-icon"></i>
-            <h1>Mistry4Ever Store</h1>
-            <p class="tagline">Top Up Game Favoritmu!</p>
+            <div class="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7 text-white cursor-pointer" id="backToGameSelectionBtn">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+                <span class="header-title">Mistry4Ever Store</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                </svg>
+            </div>
         </div>
 
-        <div id="gameSelectionSection" class="section active">
-            <p class="instruction-main">Pilih game untuk top-up:</p>
-            <div class="game-selection-grid">
-                <button class="game-btn" data-game="ff" data-color="red">
-                    <div class="logo-circle">
-                        <i class="fas fa-fire"></i> </div>
-                    Free Fire
-                </button>
-                <button class="game-btn" data-game="ml" data-color="blue">
-                    <div class="logo-circle">
-                        <i class="fas fa-fist-raised"></i> </div>
-                    Mobile Legends
+        <!-- Game Selection Screen -->
+        <div id="gameSelectionScreen" class="game-selection active">
+            <h2 class="text-2xl font-bold text-white mb-8">Pilih Game</h2>
+            <div class="game-card" data-game="mlbb">
+                <div class="game-icon-emoji">🎮</div>
+                <h3>Mobile Legends: Bang Bang</h3>
+            </div>
+            <div class="game-card" data-game="ff">
+                <div class="game-icon-emoji">🎮</div>
+                <h3>Free Fire</h3>
+            </div>
+        </div>
+
+        <!-- Mobile Legends Content -->
+        <div id="mlbbContent" class="content-section">
+            <div class="main-content-padding">
+                <!-- Mobile Legends Title -->
+                <div class="flex items-center gap-4 mb-5">
+                    <div class="icon-emoji w-16 h-16 rounded-lg">🎮</div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Mobile Legends: Bang Bang</h2>
+                        <div class="flex items-center text-sm text-gray-400 mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-green-400 mr-1">
+                                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                            </svg>
+                            Pembayaran yang Aman
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Masukkan User ID -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">1</span>
+                        <span class="section-title">Masukkan User ID</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="mlbbUserID" placeholder="Masukkan User ID">
+                        <input type="text" id="mlbbZoneID" placeholder="Zone ID" class="zone-id">
+                        <div class="info-icon" data-info="Untuk mengetahui User ID Anda, silakan klik menu profile dibagian kiri atas pada menu utama game. User ID akan terlihat dibagian bawah Nama Karakter Game Anda. Silakan masukkan User ID Anda untuk menyelesaikan transaksi. Contoh : 12345678(1234).">?</div>
+                    </div>
+                    <p class="text-sm text-gray-400">Untuk mengetahui User ID Anda, silakan klik menu profile dibagian kiri atas pada menu utama game. User ID akan terlihat dibagian bawah Nama Karakter Game Anda. Silakan masukkan User ID Anda untuk menyelesaikan transaksi. Contoh : 12345678(1234).</p>
+                </div>
+
+                <!-- Step 2: Pilih Nominal Top Up -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">2</span>
+                        <span class="section-title">Pilih Nominal Top Up</span>
+                    </div>
+                    <div class="flex items-center text-sm text-red-400 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-1">
+                            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6a.75.75 0 001.5 0V6zm-.75 10.5a.75.75 0 110-1.5.75.75 0 010 1.5z" clip-rule="evenodd" />
+                        </svg>
+                        27.076 item dibeli dalam satu jam terakhir
+                    </div>
+
+                    <div class="tab-buttons mb-4">
+                        <div class="tab-button active" data-tab="diamond">Diamond</div>
+                        <div class="tab-button" data-tab="2x-recharge">2x Recharge Bonus</div>
+                        <div class="tab-button" data-tab="twilight-pass">Twilight Pass</div>
+                        <div class="tab-button" data-tab="weekly-pass">Weekly Diamond Pass</div>
+                    </div>
+
+                    <!-- Diamond Tab Content -->
+                    <div id="diamond-content" class="tab-content">
+                        <div class="diamond-grid">
+                            <!-- Diamond Items (MLBB) - Prices adjusted -->
+                            <div class="diamond-item" data-price="3800" data-diamonds="3">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">3 Diamonds</div>
+                                <div class="price-display">Rp. 3.800</div>
+                            </div>
+                            <div class="diamond-item popular-item" data-price="4080" data-diamonds="5">
+                                <span class="popular-tag">POPULAR</span>
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">5 Diamonds</div>
+                                <div class="price-display">Rp. 4.080</div>
+                            </div>
+                            <div class="diamond-item" data-price="6190" data-diamonds="12">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">12 Diamonds</div>
+                                <div class="price-display">Rp. 6.190</div>
+                            </div>
+                            <div class="diamond-item" data-price="8300" data-diamonds="19">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">19 Diamonds</div>
+                                <div class="price-display">Rp. 8.300</div>
+                            </div>
+                            <div class="diamond-item" data-price="10900" data-diamonds="28">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">28 Diamonds</div>
+                                <div class="price-display">Rp. 10.900</div>
+                            </div>
+                            <div class="diamond-item" data-price="14250" data-diamonds="44">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">44 Diamonds</div>
+                                <div class="price-display">Rp. 14.250</div>
+                            </div>
+                            <div class="diamond-item" data-price="18400" data-diamonds="59">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">59 Diamonds</div>
+                                <div class="price-display">Rp. 18.400</div>
+                            </div>
+                            <div class="diamond-item" data-price="26750" data-diamonds="85">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">85 Diamonds</div>
+                                <div class="price-display">Rp. 26.750</div>
+                            </div>
+                            <div class="diamond-item" data-price="73500" data-diamonds="170">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">170 Diamonds</div>
+                                <div class="price-display">Rp. 73.500</div>
+                            </div>
+                            <div class="diamond-item" data-price="94000" data-diamonds="240">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">240 Diamonds</div>
+                                <div class="price-display">Rp. 94.000</div>
+                            </div>
+                            <div class="diamond-item popular-item" data-price="110000" data-diamonds="296">
+                                <span class="popular-tag">POPULAR</span>
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">296 Diamonds</div>
+                                <div class="price-display">Rp. 110.000</div>
+                            </div>
+                            <div class="diamond-item" data-price="141000" data-diamonds="408">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">408 Diamonds</div>
+                                <div class="price-display">Rp. 141.000</div>
+                            </div>
+                            <div class="diamond-item" data-price="184000" data-diamonds="568">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">568 Diamonds</div>
+                                <div class="price-display">Rp. 184.000</div>
+                            </div>
+                            <div class="diamond-item" data-price="267500" data-diamonds="875">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">875 Diamonds</div>
+                                <div class="price-display">Rp. 267.500</div>
+                            </div>
+                            <div class="diamond-item" data-price="553000" data-diamonds="2010">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">2010 Diamonds</div>
+                                <div class="price-display">Rp. 553.000</div>
+                            </div>
+                            <div class="diamond-item" data-price="1290000" data-diamonds="4830">
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">4830 Diamonds</div>
+                                <div class="price-display">Rp. 1.290.000</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2x Recharge Bonus Tab Content (Hidden by default) -->
+                    <div id="2x-recharge-content" class="tab-content hidden">
+                        <div class="info-card mb-4">
+                            <h4>2x Recharge Bonus</h4>
+                            <p>Selama event ini, player yang belum top up tingkatan 50/150/250/500 Diamond melalui platform ini bisa menikmati bonus Diamond tambahan.</p>
+                            <span class="learn-more">Learn more</span>
+                        </div>
+                        <div class="diamond-grid">
+                            <div class="diamond-item hot-item" data-price="18200" data-diamonds="100">
+                                <span class="hot-tag">HOT</span>
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">100 Diamonds (50+50) pengisian pertama!</div>
+                                <div class="price-display">Rp. 18.200</div>
+                            </div>
+                            <div class="diamond-item hot-item" data-price="74000" data-diamonds="300">
+                                <span class="hot-tag">HOT</span>
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">300 Diamonds (150+150) pengisian pertama!</div>
+                                <div class="price-display">Rp. 74.000</div>
+                            </div>
+                            <div class="diamond-item hot-item" data-price="106000" data-diamonds="500">
+                                <span class="hot-tag">HOT</span>
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">500 Diamonds (250+250) pengisian pertama!</div>
+                                <div class="price-display">Rp. 106.000</div>
+                            </div>
+                            <div class="diamond-item hot-item" data-price="184000" data-diamonds="1000">
+                                <span class="hot-tag">HOT</span>
+                                <div class="icon-emoji">💎</div>
+                                <div class="diamond-count">1000 Diamonds (500+500) pengisian pertama!</div>
+                                <div class="price-display">Rp. 184.000</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Twilight Pass Tab Content (Hidden by default) -->
+                    <div id="twilight-pass-content" class="tab-content hidden">
+                        <div class="info-card mb-4">
+                            <h4>Twilight Pass</h4>
+                            <p>Mobile Legends Twilight Pass hanya bisa dibeli sekali per-user account.</p>
+                        </div>
+                        <div class="diamond-grid">
+                            <div class="diamond-item" data-price="192500" data-diamonds="Twilight Pass">
+                                <div class="icon-emoji">📆</div>
+                                <div class="diamond-count">Twilight Pass</div>
+                                <div class="price-display">Rp. 192.500</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Diamond Pass Tab Content (Hidden by default) -->
+                    <div id="weekly-pass-content" class="tab-content hidden">
+                        <div class="info-card mb-4">
+                            <h4>Weekly Diamond Pass</h4>
+                            <p>1. Pastikan untuk membeli Pass setelah LV 5 tercapai.<br>2. Anda tidak dapat membeli Weekly Diamond Pass tambahan.</p>
+                            <span class="learn-more">Learn more</span>
+                        </div>
+                        <div class="diamond-grid">
+                            <div class="diamond-item" data-price="33200" data-diamonds="Weekly Diamond Pass">
+                                <div class="icon-emoji">📆</div>
+                                <div class="diamond-count">Weekly Diamond Pass</div>
+                                <div class="price-display">Rp. 33.200</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Pilih pembayaran -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">3</span>
+                        <span class="section-title">Pilih pembayaran</span>
+                    </div>
+
+                    <div class="payment-grid">
+                        <div class="payment-item" data-method="GoPay">
+                            <img src="https://placehold.co/90x50/00a651/ffffff?text=GoPay" alt="GoPay Logo">
+                            <div class="payment-name">GoPay</div>
+                        </div>
+                        <div class="payment-item" data-method="DANA">
+                            <img src="https://placehold.co/90x50/108ee9/ffffff?text=DANA" alt="DANA Logo">
+                            <div class="payment-name">DANA</div>
+                        </div>
+                        <div class="payment-item" data-method="QRIS">
+                            <img src="https://placehold.co/90x50/005691/ffffff?text=QRIS" alt="QRIS Logo">
+                            <div class="payment-name">QRIS</div>
+                        </div>
+                        <div class="payment-item" data-method="OVO">
+                            <img src="https://placehold.co/90x50/4c2f9e/ffffff?text=OVO" alt="OVO Logo">
+                            <div class="payment-name">OVO</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Masukkan Detail (MLBB) -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">4</span>
+                        <span class="section-title">Masukkan Detail</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="mlbbEmail" placeholder="Masukkan Email Anda">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fixed bottom bar for MLBB -->
+            <div class="fixed-bottom-bar">
+                <button id="mlbbTopupNowBtn" class="confirm-button">
+                    Topup Sekarang
                 </button>
             </div>
         </div>
 
-        <div id="topupFormSection" class="section">
-            <p class="instruction">Pastikan User ID, Email, dan Anda benar.</p>
-
-            <form id="topupForm">
-                <div class="form-group">
-                    <label for="gameEmail"><i class="fas fa-envelope"></i> Email:</label>
-                    <input type="email" id="gameEmail" placeholder="Masukkan Email Anda" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="gameId" id="gameIdLabel"><i class="fas fa-id-card"></i> ID Game:</label>
-                    <input type="text" id="gameId" placeholder="Masukkan ID Game" required>
-                </div>
-
-                <div class="form-group" id="serverIdGroup">
-                    <label for="serverId"><i class="fas fa-server"></i> Server ID:</label>
-                    <input type="text" id="serverId" placeholder="Masukkan Server ID (contoh: 1234)" required>
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-gem"></i> Pilih Paket Diamond:</label>
-                    <div class="diamond-options-grid" id="diamondOptionsContainer">
+        <!-- Free Fire Content -->
+        <div id="ffContent" class="content-section">
+            <div class="main-content-padding">
+                <!-- Free Fire Title -->
+                <div class="flex items-center gap-4 mb-5">
+                    <div class="icon-emoji w-16 h-16 rounded-lg">🎮</div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Free Fire Top-up</h2>
+                        <div class="flex items-center text-sm text-gray-400 mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-green-400 mr-1">
+                                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                            </svg>
+                            Pembayaran yang Aman
                         </div>
-                </div>
-
-                <div class="form-group price-summary">
-                    <label for="totalPrice"><i class="fas fa-hand-holding-usd"></i> Harga Akhir:</label>
-                    <input type="text" id="totalPrice" class="price-display" readonly value="Rp 0">
-                    <small>*Harga sudah termasuk pajak 11% dan biaya admin.</small>
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-wallet"></i> Metode Pembayaran:</label>
-                    <div class="payment-methods">
-                        <label>
-                            <input type="radio" name="paymentMethod" value="DANA" required> DANA
-                        </label>
-                        <label>
-                            <input type="radio" name="paymentMethod" value="GOPAY"> GOPAY
-                        </label>
-                        <label>
-                            <input type="radio" name="paymentMethod" value="OVO"> OVO
-                        </label>
-                        <label>
-                            <input type="radio" name="paymentMethod" value="QRIS"> QRIS
-                        </label>
                     </div>
                 </div>
 
-                <button type="submit" id="topupButton"><i class="fab fa-whatsapp"></i> Top Up Sekarang</button>
-            </form>
+                <!-- Step 1: Masukkan Player ID (FF) -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">1</span>
+                        <span class="section-title">Masukkan Player ID</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="ffPlayerID" placeholder="Masukkan Player ID">
+                        <div class="info-icon" data-info="Untuk menemukan ID Anda, klik pada ikon karakter. User ID tercantum di bawah nama karakter Anda. Contoh: 5363268446.">?</div>
+                    </div>
+                    <p class="text-sm text-gray-400">Untuk menemukan ID Anda, klik pada ikon karakter. User ID tercantum di bawah nama karakter Anda. Contoh: 5363268446.</p>
+                </div>
+
+                <!-- Step 2: Pilih Nominal Top Up (FF) -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">2</span>
+                        <span class="section-title">Pilih Nominal Top Up</span>
+                    </div>
+                    <div class="flex items-center text-sm text-red-400 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-1">
+                            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6a.75.75 0 001.5 0V6zm-.75 10.5a.75.75 0 110-1.5.75.75 0 010 1.5z" clip-rule="evenodd" />
+                        </svg>
+                        13.756 item dibeli dalam satu jam terakhir
+                    </div>
+
+                    <div class="diamond-grid">
+                        <!-- Diamond Items (FF) - Prices adjusted -->
+                        <div class="diamond-item" data-price="3500" data-diamonds="5">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">5 Diamonds</div>
+                            <div class="price-display">Rp. 3.500</div>
+                        </div>
+                        <div class="diamond-item popular-item" data-price="4490" data-diamonds="12">
+                            <span class="popular-tag">POPULAR</span>
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">12 Diamonds</div>
+                            <div class="price-display">Rp. 4.490</div>
+                        </div>
+                        <div class="diamond-item" data-price="10500" data-diamonds="50">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">50 Diamonds</div>
+                            <div class="price-display">Rp. 10.500</div>
+                        </div>
+                        <div class="diamond-item" data-price="12500" data-diamonds="70">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">70 Diamonds</div>
+                            <div class="price-display">Rp. 12.500</div>
+                        </div>
+                        <div class="diamond-item" data-price="22500" data-diamonds="140">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">140 Diamonds</div>
+                            <div class="price-display">Rp. 22.500</div>
+                        </div>
+                        <div class="diamond-item" data-price="52500" data-diamonds="355">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">355 Diamonds</div>
+                            <div class="price-display">Rp. 52.500</div>
+                        </div>
+                        <div class="diamond-item" data-price="108000" data-diamonds="720">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">720 Diamonds</div>
+                            <div class="price-display">Rp. 108.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="225000" data-diamonds="1450">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">1450 Diamonds</div>
+                            <div class="price-display">Rp. 225.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="325000" data-diamonds="2180">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">2180 Diamonds</div>
+                            <div class="price-display">Rp. 325.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="525000" data-diamonds="3640">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">3640 Diamonds</div>
+                            <div class="price-display">Rp. 525.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="1025000" data-diamonds="7290">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">7290 Diamonds</div>
+                            <div class="price-display">Rp. 1.025.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="5025000" data-diamonds="36500">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">36500 Diamonds</div>
+                            <div class="price-display">Rp. 5.025.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="10025000" data-diamonds="73100">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">73100 Diamonds</div>
+                            <div class="price-display">Rp. 10.025.000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Pilih pembayaran (FF) -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">3</span>
+                        <span class="section-title">Pilih pembayaran</span>
+                    </div>
+
+                    <div class="payment-grid">
+                        <div class="payment-item" data-method="GoPay">
+                            <img src="https://placehold.co/90x50/00a651/ffffff?text=GoPay" alt="GoPay Logo">
+                            <div class="payment-name">GoPay</div>
+                        </div>
+                        <div class="payment-item" data-method="DANA">
+                            <img src="https://placehold.co/90x50/108ee9/ffffff?text=DANA" alt="DANA Logo">
+                            <div class="payment-name">DANA</div>
+                        </div>
+                        <div class="payment-item" data-method="QRIS">
+                            <img src="https://placehold.co/90x50/005691/ffffff?text=QRIS" alt="QRIS Logo">
+                            <div class="payment-name">QRIS</div>
+                        </div>
+                        <div class="payment-item" data-method="OVO">
+                            <img src="https://placehold.co/90x50/4c2f9e/ffffff?text=OVO" alt="OVO Logo">
+                            <div class="payment-name">OVO</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Masukkan Detail (MLBB) -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">4</span>
+                        <span class="section-title">Masukkan Detail</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="mlbbEmail" placeholder="Masukkan Email Anda">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fixed bottom bar for MLBB -->
+            <div class="fixed-bottom-bar">
+                <button id="mlbbTopupNowBtn" class="confirm-button">
+                    Topup Sekarang
+                </button>
+            </div>
+        </div>
+
+        <!-- Free Fire Content -->
+        <div id="ffContent" class="content-section">
+            <div class="main-content-padding">
+                <!-- Free Fire Title -->
+                <div class="flex items-center gap-4 mb-5">
+                    <div class="icon-emoji w-16 h-16 rounded-lg">🎮</div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Free Fire Top-up</h2>
+                        <div class="flex items-center text-sm text-gray-400 mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-green-400 mr-1">
+                                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                            </svg>
+                            Pembayaran yang Aman
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Masukkan Player ID (FF) -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">1</span>
+                        <span class="section-title">Masukkan Player ID</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="ffPlayerID" placeholder="Masukkan Player ID">
+                        <div class="info-icon" data-info="Untuk menemukan ID Anda, klik pada ikon karakter. User ID tercantum di bawah nama karakter Anda. Contoh: 5363268446.">?</div>
+                    </div>
+                    <p class="text-sm text-gray-400">Untuk menemukan ID Anda, klik pada ikon karakter. User ID tercantum di bawah nama karakter Anda. Contoh: 5363268446.</p>
+                </div>
+
+                <!-- Step 2: Pilih Nominal Top Up (FF) -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">2</span>
+                        <span class="section-title">Pilih Nominal Top Up</span>
+                    </div>
+                    <div class="flex items-center text-sm text-red-400 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-1">
+                            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6a.75.75 0 001.5 0V6zm-.75 10.5a.75.75 0 110-1.5.75.75 0 010 1.5z" clip-rule="evenodd" />
+                        </svg>
+                        13.756 item dibeli dalam satu jam terakhir
+                    </div>
+
+                    <div class="diamond-grid">
+                        <!-- Diamond Items (FF) - Prices adjusted -->
+                        <div class="diamond-item" data-price="3500" data-diamonds="5">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">5 Diamonds</div>
+                            <div class="price-display">Rp. 3.500</div>
+                        </div>
+                        <div class="diamond-item popular-item" data-price="4490" data-diamonds="12">
+                            <span class="popular-tag">POPULAR</span>
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">12 Diamonds</div>
+                            <div class="price-display">Rp. 4.490</div>
+                        </div>
+                        <div class="diamond-item" data-price="10500" data-diamonds="50">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">50 Diamonds</div>
+                            <div class="price-display">Rp. 10.500</div>
+                        </div>
+                        <div class="diamond-item" data-price="12500" data-diamonds="70">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">70 Diamonds</div>
+                            <div class="price-display">Rp. 12.500</div>
+                        </div>
+                        <div class="diamond-item" data-price="22500" data-diamonds="140">
+                            <span class="hot-tag">HOT</span>
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">140 Diamonds</div>
+                            <div class="price-display">Rp. 22.500</div>
+                        </div>
+                        <div class="diamond-item" data-price="52500" data-diamonds="355">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">355 Diamonds</div>
+                            <div class="price-display">Rp. 52.500</div>
+                        </div>
+                        <div class="diamond-item" data-price="108000" data-diamonds="720">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">720 Diamonds</div>
+                            <div class="price-display">Rp. 108.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="225000" data-diamonds="1450">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">1450 Diamonds</div>
+                            <div class="price-display">Rp. 225.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="325000" data-diamonds="2180">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">2180 Diamonds</div>
+                            <div class="price-display">Rp. 325.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="525000" data-diamonds="3640">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">3640 Diamonds</div>
+                            <div class="price-display">Rp. 525.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="1025000" data-diamonds="7290">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">7290 Diamonds</div>
+                            <div class="price-display">Rp. 1.025.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="5025000" data-diamonds="36500">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">36500 Diamonds</div>
+                            <div class="price-display">Rp. 5.025.000</div>
+                        </div>
+                        <div class="diamond-item" data-price="10025000" data-diamonds="73100">
+                            <div class="icon-emoji">💎</div>
+                            <div class="diamond-count">73100 Diamonds</div>
+                            <div class="price-display">Rp. 10.025.000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Pilih pembayaran (FF) -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">3</span>
+                        <span class="section-title">Pilih pembayaran</span>
+                    </div>
+
+                    <div class="payment-grid">
+                        <div class="payment-item" data-method="GoPay">
+                            <img src="https://placehold.co/90x50/00a651/ffffff?text=GoPay" alt="GoPay Logo">
+                            <div class="payment-name">GoPay</div>
+                        </div>
+                        <div class="payment-item" data-method="DANA">
+                            <img src="https://placehold.co/90x50/108ee9/ffffff?text=DANA" alt="DANA Logo">
+                            <div class="payment-name">DANA</div>
+                        </div>
+                        <div class="payment-item" data-method="QRIS">
+                            <img src="https://placehold.co/90x50/005691/ffffff?text=QRIS" alt="QRIS Logo">
+                            <div class="payment-name">QRIS</div>
+                        </div>
+                        <div class="payment-item" data-method="OVO">
+                            <img src="https://placehold.co/90x50/4c2f9e/ffffff?text=OVO" alt="OVO Logo">
+                            <div class="payment-name">OVO</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Masukkan Detail (MLBB) -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-violet-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">4</span>
+                        <span class="section-title">Masukkan Detail</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="ffEmail" placeholder="Masukkan Email Anda">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fixed bottom bar for FF -->
+            <div class="fixed-bottom-bar">
+                <button id="ffTopupNowBtn" class="confirm-button">
+                    Topup Sekarang
+                </button>
+            </div>
         </div>
     </div>
 
-    <script src="script.js"></script> </body>
-                            </html>
+    <!-- Custom Alert/Info Modal -->
+    <div id="customAlert" class="order-summary-modal">
+        <div class="order-summary-content">
+            <div class="order-summary-header">
+                <h3 id="alertTitle">Info</h3>
+                <button class="close-btn" id="closeCustomAlertBtn">×</button>
+            </div>
+            <p id="alertMessage" class="text-white text-center mb-4"></p>
+            <button class="confirm-button" id="okCustomAlertBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Link to external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
