@@ -201,9 +201,11 @@ function renderApp() {
     mainContainer.className = "min-h-full w-full flex items-center justify-center p-4";
     
     const contentBox = document.createElement('div');
-    // Tambah `max-h-[calc(100vh-32px)]` untuk membatasi tinggi maksimum contentBox
-    // dan `overflow-y-auto` untuk memungkinkan scrolling jika isinya melebihi tinggi
-    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col overflow-y-auto custom-scrollbar max-h-[calc(100vh-32px)]"; 
+    // contentBox akan menjadi flex container dengan tinggi terbatas dan scrollable
+    // `flex-col` agar item di dalamnya tersusun vertikal
+    // `max-h-[calc(100vh-32px)]` membatasi tinggi maksimum kotak konten
+    // `overflow-y-auto custom-scrollbar` mengaktifkan scrolling
+    contentBox.className = "bg-gray-900 bg-opacity-80 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg mx-auto border border-purple-700 relative flex flex-col max-h-[calc(100vh-32px)] overflow-y-auto custom-scrollbar"; 
 
     // Header Toko (dipindahkan ke dalam contentBox agar tetap di atas)
     const header = document.createElement('h1');
@@ -241,7 +243,7 @@ function renderApp() {
 // Fungsi untuk merender bagian pemilihan game
 function renderGameSelection(parentEl) {
     const gameSelectionDiv = document.createElement('div');
-    // Tambah `flex-grow` dan `justify-center` untuk memastikan konten mengisi ruang dan terpusat vertikal
+    // Tambah `flex-grow` agar div ini mengisi ruang di dalam contentBox dan memusatkan konten vertikal
     gameSelectionDiv.className = "flex flex-col items-center justify-center flex-grow w-full text-center"; 
 
     const promptText = document.createElement('p');
@@ -254,11 +256,12 @@ function renderGameSelection(parentEl) {
 
     // Free Fire Button (menggunakan simbol Gamepad)
     const ffButton = document.createElement('button');
-    ffButton.className = "flex flex-col items-center justify-center p-6 bg-red-600 hover:bg-red-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 flex-1";
+    // Tambah `cursor-pointer` untuk indikasi visual bahwa tombol bisa diklik
+    ffButton.className = "flex flex-col items-center justify-center p-6 bg-red-600 hover:bg-red-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 flex-1 cursor-pointer";
     ffButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad mb-2 text-white"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><path d="M6 12v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path><path d="M12 18v4"></path><path d="M17 21h-2"></path><path d="M7 21h2"></path><path d="M12 12h.01"></path><path d="M12 12v.01"></path></svg><span class="text-xl font-semibold">Free Fire</span>`;
     // Attach event listener using addEventListener
     ffButton.addEventListener('click', () => {
-        console.log("Free Fire button clicked!"); // Diagnostik
+        console.log("Free Fire button clicked!"); // Diagnostik: Periksa konsol browser
         selectedGame = "Free Fire";
         resetFormState();
         renderApp();
@@ -267,11 +270,12 @@ function renderGameSelection(parentEl) {
 
     // Mobile Legends Button (menggunakan simbol Gamepad)
     const mlButton = document.createElement('button');
-    mlButton.className = "flex flex-col items-center justify-center p-6 bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 flex-1";
+    // Tambah `cursor-pointer`
+    mlButton.className = "flex flex-col items-center justify-center p-6 bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 flex-1 cursor-pointer";
     mlButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad mb-2 text-white"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><path d="M6 12v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path><path d="M12 18v4"></path><path d="M17 21h-2"></path><path d="M7 21h2"></path><path d="M12 12h.01"></path><path d="M12 12v.01"></path></svg><span class="text-xl font-semibold">Mobile Legends</span>`;
     // Attach event listener using addEventListener
     mlButton.addEventListener('click', () => {
-        console.log("Mobile Legends button clicked!"); // Diagnostik
+        console.log("Mobile Legends button clicked!"); // Diagnostik: Periksa konsol browser
         selectedGame = "Mobile Legends";
         resetFormState();
         renderApp();
@@ -285,8 +289,10 @@ function renderGameSelection(parentEl) {
 // Fungsi untuk merender form top-up
 function renderTopUpForm(parentEl) {
     const formDiv = document.createElement('div');
-    // formDiv tidak perlu kelas scrolling, karena scrolling akan di contentBox
-    formDiv.className = "flex flex-col flex-grow"; // Tambah flex flex-col flex-grow agar konten form mengisi ruang
+    // formDiv sekarang akan menjadi flex container yang mengisi sisa ruang
+    // `flex-grow` membuatnya mengisi ruang yang tersedia
+    // `overflow-y-auto custom-scrollbar` dipindahkan ke contentBox
+    formDiv.className = "flex flex-col flex-grow";
 
     const headerContainer = document.createElement('div');
     headerContainer.className = "flex items-center justify-between mb-6";
@@ -374,7 +380,7 @@ function renderTopUpForm(parentEl) {
 
     gameData[selectedGame].forEach(item => {
         const itemButton = document.createElement('button');
-        itemButton.className = `flex items-center justify-between p-4 rounded-lg border-2 transition-all duration-200 ease-in-out ${selectedItem?.id === item.id ? 'border-purple-500 bg-purple-900 shadow-lg' : 'border-gray-700 bg-gray-800 hover:border-purple-600 hover:bg-gray-700'}`;
+        itemButton.className = `flex items-center justify-between p-4 rounded-lg border-2 transition-all duration-200 ease-in-out ${selectedItem?.id === item.id ? 'border-purple-500 bg-purple-900 shadow-lg' : 'border-gray-700 bg-gray-800 hover:border-purple-600 hover:bg-gray-700'} cursor-pointer`;
         itemButton.innerHTML = `
             <div class="flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-diamond text-blue-400 mr-3"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.4L7 18.7c.92.92 2.22 1.4 3.54 1.38h.04c1.32.02 2.62-.46 3.54-1.38l4.3-4.3a2.41 2.41 0 0 0 0-3.4L17 5.3c-.92-.92-2.22-1.4-3.54-1.38h-.04c-1.32-.02-2.62.46-3.54 1.38z"></path><path d="M7 18.7 17 5.3"></path><path d="M17 18.7 7 5.3"></path></svg>
@@ -399,7 +405,8 @@ function renderTopUpForm(parentEl) {
         const methodButton = document.createElement('button');
         const isDisabled = method.isUnderMaintenance || (selectedItem && selectedItem.restrictedPaymentMethods && selectedItem.restrictedPaymentMethods.includes(method.id));
         methodButton.disabled = isDisabled;
-        methodButton.className = `flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all duration-200 ease-in-out ${selectedPaymentMethod?.id === method.id ? 'border-purple-500 bg-purple-900 shadow-lg' : 'border-gray-700 bg-gray-800 hover:border-purple-600 hover:bg-gray-700'} ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+        // Tambah `cursor-pointer`
+        methodButton.className = `flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all duration-200 ease-in-out ${selectedPaymentMethod?.id === method.id ? 'border-purple-500 bg-purple-900 shadow-lg' : 'border-gray-700 bg-gray-800 hover:border-purple-600 hover:bg-gray-700'} ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`;
         methodButton.innerHTML = `
             ${method.icon}
             <span class="text-sm mt-1 text-center">${method.name}</span>
@@ -423,6 +430,7 @@ function renderTopUpForm(parentEl) {
 
     // Tombol Top-Up
     const topUpButton = document.createElement('button');
+    // Tambah `cursor-pointer`
     topUpButton.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out`;
     topUpButton.addEventListener('click', handleTopUp);
     updateTopUpButtonState(topUpButton); // Panggil untuk pertama kali
@@ -499,7 +507,7 @@ function updateTopUpButtonState(button) {
     if (isTopUpDisabled) {
         button.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out bg-gray-600 cursor-not-allowed opacity-70`;
     } else {
-        button.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-opacity-50`;
+        button.className = `w-full py-4 text-white text-xl font-bold rounded-lg shadow-xl transform transition-all duration-300 ease-in-out bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-opacity-50 cursor-pointer`;
     }
 }
 
@@ -619,4 +627,3 @@ function closeModal() {
 // --- Initial Render ---
 // Panggil initializeFirebase saat DOM sudah siap
 document.addEventListener('DOMContentLoaded', initializeFirebase);
-
