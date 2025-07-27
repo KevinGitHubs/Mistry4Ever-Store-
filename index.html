@@ -14,23 +14,20 @@
             min-height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            user-select: none; /* Mencegah seleksi teks */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         #hahaText {
             font-size: 5em;
             color: #333;
             margin-bottom: 30px;
         }
-        .disabled-button {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            cursor: not-allowed;
-            background-color: #ccc;
-            color: #666;
-            border: none;
-            border-radius: 5px;
-            margin: 10px;
+        .hidden {
+            display: none !important; /* Pastikan elemen benar-benar tersembunyi */
         }
-        .active-button {
+        #activateButton {
             padding: 15px 30px;
             font-size: 1.2em;
             cursor: pointer;
@@ -40,8 +37,16 @@
             border-radius: 5px;
             margin: 10px;
         }
-        .hidden {
-            display: none;
+        /* Style untuk tombol setelah diaktifkan */
+        .active-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            background-color: #28a745; /* Warna hijau setelah aktif */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
         }
     </style>
 </head>
@@ -49,11 +54,11 @@
 
     <div id="hahaText">Hahaha</div>
 
-    <button id="activateButton" class="active-button">Aktifkan</button>
+    <button id="activateButton">Aktifkan</button>
 
-    <button id="exitButton" class="disabled-button" disabled>Keluar Web</button>
-    <button id="anotherButton" class="disabled-button" disabled>Tombol Lain 1</button>
-    <button id="yetAnotherButton" class="disabled-button" disabled>Tombol Lain 2</button>
+    <button id="exitButton" class="hidden">Keluar Web</button>
+    <button id="anotherButton" class="hidden">Tombol Lain 1</button>
+    <button id="yetAnotherButton" class="hidden">Tombol Lain 2</button>
 
     <script>
         const activateButton = document.getElementById('activateButton');
@@ -61,94 +66,132 @@
         const anotherButton = document.getElementById('anotherButton');
         const yetAnotherButton = document.getElementById('yetAnotherButton');
 
-        // Fungsi untuk menonaktifkan semua tombol dan notifikasi
-        function disableAll() {
-            exitButton.classList.add('disabled-button');
-            exitButton.classList.remove('active-button');
-            exitButton.disabled = true;
+        // Referensi asli untuk fungsi notifikasi
+        let originalAlert = window.alert;
+        let originalConfirm = window.confirm;
+        let originalPrompt = window.prompt;
 
-            anotherButton.classList.add('disabled-button');
-            anotherButton.classList.remove('active-button');
-            anotherButton.disabled = true;
+        // Fungsi untuk menonaktifkan interaksi (sejauh yang diizinkan browser)
+        function disableInteractions() {
+            // Sembunyikan semua tombol lain
+            exitButton.classList.add('hidden');
+            anotherButton.classList.add('hidden');
+            yetAnotherButton.classList.add('hidden');
 
-            yetAnotherButton.classList.add('disabled-button');
-            yetAnotherButton.classList.remove('active-button');
-            yetAnotherButton.disabled = true;
-
-            // Menonaktifkan notifikasi (contoh: mencoba mencegah alert/confirm)
-            // Ini adalah pendekatan simbolis, JavaScript tidak bisa sepenuhnya menonaktifkan semua notifikasi browser.
-            // Untuk menonaktifkan notifikasi browser secara default, biasanya perlu pengaturan browser itu sendiri.
+            // Menonaktifkan notifikasi
             window.alert = function() {};
-            window.confirm = function() {};
-            window.prompt = function() {};
+            window.confirm = function() { return true; }; // Mengembalikan true agar kode tidak berhenti
+            window.prompt = function() { return ''; };
+
+            // Mencegah klik kanan
+            document.addEventListener('contextmenu', preventDefaultAction, true);
+            // Mencegah drag dan drop (jika ada elemen yang draggable)
+            document.addEventListener('dragstart', preventDefaultAction, true);
+            // Mencegah beberapa keypress yang umum untuk navigasi atau inspeksi
+            document.addEventListener('keydown', handleKeyPress, true);
+
+            // Mencegah user meninggalkan halaman (akan memicu peringatan browser, tidak bisa sepenuhnya dicegah)
+            window.addEventListener('beforeunload', preventPageUnload);
+
+            // Mengunci pointer (fitur eksperimental, tidak didukung luas untuk tujuan ini)
+            // document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock || document.body.webkitRequestPointerLock;
+            // if (document.body.requestPointerLock) {
+            //     document.body.requestPointerLock();
+            // }
         }
 
-        // Fungsi untuk mengaktifkan semua tombol
-        function enableAll() {
-            exitButton.classList.remove('disabled-button');
+        // Fungsi untuk mengaktifkan kembali interaksi
+        function enableInteractions() {
+            // Tampilkan kembali tombol
+            exitButton.classList.remove('hidden');
+            anotherButton.classList.remove('hidden');
+            yetAnotherButton.classList.remove('hidden');
+
+            // Aktifkan styling tombol setelah diaktifkan
             exitButton.classList.add('active-button');
-            exitButton.disabled = false;
-
-            anotherButton.classList.remove('disabled-button');
             anotherButton.classList.add('active-button');
-            anotherButton.disabled = false;
-
-            yetAnotherButton.classList.remove('disabled-button');
             yetAnotherButton.classList.add('active-button');
-            yetAnotherButton.disabled = false;
 
-            // Mengembalikan fungsi notifikasi asli (jika ada)
-            // Ini juga simbolis, karena window.alert dll. bisa ditimpa lagi oleh script lain.
-            delete window.alert;
-            delete window.confirm;
-            delete window.prompt;
+            // Mengembalikan notifikasi asli
+            window.alert = originalAlert;
+            window.confirm = originalConfirm;
+            window.prompt = originalPrompt;
+
+            // Hapus event listener pencegah
+            document.removeEventListener('contextmenu', preventDefaultAction, true);
+            document.removeEventListener('dragstart', preventDefaultAction, true);
+            document.removeEventListener('keydown', handleKeyPress, true);
+            window.removeEventListener('beforeunload', preventPageUnload);
+
+            // Jika pointer lock digunakan, rilis
+            // if (document.pointerLockElement === document.body) {
+            //     document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock || document.webkitExitPointerLock;
+            //     if (document.exitPointerLock) {
+            //         document.exitPointerLock();
+            //     }
+            // }
         }
 
-        // Pada awalnya, semua tombol dinonaktifkan kecuali tombol 'Aktifkan'
-        disableAll();
-        // Pastikan tombol 'Aktifkan' selalu aktif dari awal
-        activateButton.disabled = false;
-        activateButton.classList.remove('disabled-button');
-        activateButton.classList.add('active-button');
+        // Fungsi pencegah umum
+        function preventDefaultAction(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        // Handle key presses (mencegah F5, Ctrl+R, Alt+Left, dll.)
+        function handleKeyPress(event) {
+            // Mencegah F5 / Ctrl+R (reload)
+            if ((event.key === 'F5' || (event.ctrlKey && event.key === 'r') || (event.metaKey && event.key === 'r')) && !activateButton.disabled) {
+                preventDefaultAction(event);
+                alert('Fungsi ini dinonaktifkan sementara.');
+            }
+            // Mencegah Alt+Left / Alt+Right (navigasi)
+            if (event.altKey && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+                preventDefaultAction(event);
+                alert('Fungsi navigasi dinonaktifkan sementara.');
+            }
+            // Mencegah Ctrl+Shift+I / F12 (developer tools)
+            if ((event.ctrlKey && event.shiftKey && event.key === 'I') || event.key === 'F12') {
+                preventDefaultAction(event);
+                alert('Developer Tools dinonaktifkan sementara.');
+            }
+        }
+
+        // Mencegah user meninggalkan halaman (browser akan menampilkan konfirmasi)
+        function preventPageUnload(event) {
+            const message = 'Apakah Anda yakin ingin meninggalkan halaman ini?';
+            event.returnValue = message; // Standar untuk konfirmasi sebelum unload
+            return message; // Untuk beberapa browser lama
+        }
+
+
+        // Inisialisasi: nonaktifkan semua interaksi saat halaman pertama dimuat
+        disableInteractions();
 
         // Event listener untuk tombol "Aktifkan"
         activateButton.addEventListener('click', () => {
-            enableAll();
-            alert('Semua tombol dan notifikasi telah diaktifkan!');
+            enableInteractions();
+            activateButton.classList.add('hidden'); // Sembunyikan tombol Aktifkan setelah diklik
+            alert('Semua tombol dan interaksi telah diaktifkan!');
         });
 
-        // Event listener untuk tombol "Keluar Web" (hanya akan berfungsi setelah diaktifkan)
+        // Event listener untuk tombol "Keluar Web"
         exitButton.addEventListener('click', () => {
-            if (!exitButton.disabled) {
-                // Untuk keluar dari web, biasanya tidak bisa langsung dari JavaScript karena alasan keamanan.
-                // Pendekatan paling dekat adalah menutup jendela, tapi ini juga sering dibatasi oleh browser.
-                // Opsi lainnya adalah mengarahkan ke halaman kosong atau sekadar memberikan pesan.
-                alert('Anda telah mencoba keluar dari web.');
-                // window.close(); // Ini mungkin tidak berfungsi di semua browser atau jika tab tidak dibuka oleh script.
-            }
+            alert('Anda telah mencoba keluar dari web.');
+            // Tidak bisa secara paksa menutup tab atau mengarahkan ke halaman baru tanpa interaksi user.
+            // window.close(); // Ini kemungkinan besar tidak akan berfungsi
+            // window.location.href = 'about:blank'; // Ini juga sering dibatasi
         });
 
         // Event listener untuk tombol-tombol lain
         anotherButton.addEventListener('click', () => {
-            if (!anotherButton.disabled) {
-                alert('Tombol Lain 1 berfungsi!');
-            }
+            alert('Tombol Lain 1 berfungsi!');
         });
 
         yetAnotherButton.addEventListener('click', () => {
-            if (!yetAnotherButton.disabled) {
-                alert('Tombol Lain 2 berfungsi!');
-            }
+            alert('Tombol Lain 2 berfungsi!');
         });
-
-        // Mencegah semua default action klik pada dokumen kecuali untuk tombol aktifkan
-        document.addEventListener('click', (event) => {
-            if (event.target !== activateButton && event.target.tagName === 'BUTTON' && event.target.disabled) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-        }, true); // Menggunakan capture phase untuk mencegah event lebih awal
 
     </script>
 </body>
-  </html>
+</html>
