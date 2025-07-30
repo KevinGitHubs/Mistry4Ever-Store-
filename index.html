@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mistry4Ever Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+
+    header {
+      background-color: #6f42c1;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      padding: 30px;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #6f42c1;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #5a2d91;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Mistry4Ever Store</h1>
+    <p>Top Up Game Cepat & Aman</p>
+  </header>
+
+  <main>
+    <form id="topupForm">
+      <label for="userId">User ID:</label>
+      <input type="text" id="userId" placeholder="Contoh: 12345678" required />
+
+      <label for="zoneId">Zone ID:</label>
+      <input type="text" id="zoneId" placeholder="Contoh: 1234" required />
+
+      <label for="diamond">Pilih Diamond:</label>
+      <select id="diamond">
+        <option value="86">86 DM - Rp 15.500</option>
+        <option value="172">172 DM - Rp 30.500</option>
+        <option value="257">257 DM - Rp 45.500</option>
+        <option value="429">429 DM - Rp 75.500</option>
+      </select>
+
+      <p><strong>Total: <span id="total">Rp 15.500</span></strong></p>
+
+      <button type="submit">Lanjutkan Pembayaran</button>
+    </form>
+  </main>
+
+  <footer>
+    &copy; 2024 Mistry4Ever Store. All rights reserved.
+  </footer>
+
+  <script>
+    const diamondSelect = document.getElementById('diamond');
+    const totalDisplay = document.getElementById('total');
+
+    const prices = {
+      86: 15500,
+      172: 30500,
+      257: 45500,
+      429: 75500
+    };
+
+    diamondSelect.addEventListener('change', () => {
+      const selected = diamondSelect.value;
+      totalDisplay.textContent = `Rp ${prices[selected].toLocaleString()}`;
+    });
+
+    document.getElementById('topupForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const userId = document.getElementById('userId').value;
+      const zoneId = document.getElementById('zoneId').value;
+      const diamond = diamondSelect.value;
+      alert(`Top-up ${diamond} DM untuk ID ${userId}(${zoneId}) akan diproses. Total: ${prices[diamond].toLocaleString()}`);
+    });
+  </script>
+
+</body>
+</html>
