@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Block Blast Chaos</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <div id="lobby" class="screen active">
+    <h1>Block Blast Chaos</h1>
+    <button onclick="createRoom()">Buat Room</button>
+    <input id="joinCode" placeholder="Kode Room" />
+    <button onclick="joinRoom()">Join</button>
+    <select id="mode">
+      <option value="duel">Duel 1v1</option>
+      <option value="team2">Team 2v2</option>
+      <option value="team4">Team 4v4</option>
+    </select>
+    <select id="timer">
+      <option value="60">1 menit</option>
+      <option value="180" selected>3 menit</option>
+      <option value="300">5 menit</option>
+    </select>
+  </div>
+
+  <div id="game" class="screen">
+    <div id="hud">
+      <span id="timeLeft">3:00</span>
+      <div id="barContainer">
+        <div id="barA"></div>
+        <div id="barB"></div>
+      </div>
+      <span id="scoreDisplay">0 – 0</span>
+    </div>
+    <canvas id="cv" width="480" height="480"></canvas>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
