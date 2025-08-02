@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Block Blast Chaos</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    :root{--bg:#0f0f1a;--neon:#0ff;--red:#f05;--blue:#0af}
+    body{margin:0;background:var(--bg);color:#fff;font-family:Arial;display:flex;align-items:center;justify-content:center;height:100vh}
+    .screen{display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;width:100%}
+    .screen.active{display:flex}
+    button,input,select{margin:10px;padding:12px 20px;border:2px solid var(--neon);background:transparent;color:var(--neon);border-radius:6px;font-size:1rem}
+    canvas{border:2px solid var(--neon);background:#111}
+    #hud{position:absolute;top:10px;width:100%;display:flex;flex-direction:column;align-items:center;font-size:1.5rem}
+    #barContainer{width:300px;height:20px;background:#222;border-radius:10px;overflow:hidden;margin:5px 0;display:flex}
+    #barA,#barB{height:100%;transition:width .3s}
+    #barA{background:var(--blue);width:0%}
+    #barB{background:var(--red);width:0%}
+  </style>
+</head>
+<body>
+  <!-- SCREEN 1 – PILIH MODE -->
+  <div id="lobby" class="screen active">
+    <h1>Block Blast Chaos</h1>
+    <select id="mode">
+      <option value="duel">Duel 1v1</option>
+      <option value="team2">Team 2v2</option>
+      <option value="team4">Team 4v4</option>
+    </select>
+    <select id="timer">
+      <option value="60">1 menit</option>
+      <option value="180" selected>3 menit</option>
+      <option value="300">5 menit</option>
+    </select>
+    <button onclick="createRoom()">Buat Room</button>
+    <input id="joinCode" placeholder="Masukkan kode"/>
+    <button onclick="joinRoom()">Join</button>
+  </div>
+
+  <!-- SCREEN 2 – GAME -->
+  <div id="game" class="screen">
+    <div id="hud">
+      <span id="timeLeft">3:00</span>
+      <div id="barContainer"><div id="barA"></div><div id="barB"></div></div>
+      <span id="scoreDisplay">0 – 0</span>
+    </div>
+    <canvas id="cv" width="480" height="480"></canvas>
+  </div>
+
+  <script type="module">
+    // ===== FIREBASE CONFIG (API KEY ANDA) =====
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue, push, increment } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAnCn7O7Nm3Z9CZ30U2BHhEg6N1bt7zGp4",
+      authDomain: "blockblastchaos.firebaseapp.com",
+      projectId: "blockblastchaos",
+      storageBucket: "blockblastchaos.firebasestorage.app",
+      messagingSenderId: "320876032362",
+      appId: "1:320876032362:web:6e99c88866ed5fa0eb3513",
+      measurementId: "G-YBGC2NB6ML"
+    };
+    const app  = initializeApp(firebaseConfig);
+    const db   = getDatabase(app);
+    const roomRef = (code) => ref(db, 'rooms/' + code);
+
+    // ===== VARIABEL =====
+    let roomCode, playerId = Math.random().toString(36).slice(2,6);
+    let mode, timerSec, interval;
+    let score = { A:0, B:0 };
+    let team  = '';
+    const cv = document.getElementById('cv');
+    const ctx = cv.getContext('2d');
+    const size = 60;
+    let myGrid = Array.from({ length:8 }, () => Array(8).fill(0));
+
+    // ===== FUNGSI =====
+    function hideAll() {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    }
+    function show(id) {
+      hideAll(); document.getElementById(id).classList.add('active');
+    }
+
+    window.createRoom = () => {
+      mode     = document.getElementById('mode').value;
+      timerSec = +document.getElementById('timer').value;
+      roomCode = Math.random().toString(36).slice(2,7).toUpperCase();
+      set(roomRef(roomCode), { mode, timerSec, score, players:{} });
+      location.hash = roomCode;
+      startGame();
+    };
+
+    window.joinRoom = () => {
+      roomCode = document.getElementById('joinCode').value.toUpperCase();
+      if (!roomCode) return alert('Masukkan kode room!');
+      location.hash = roomCode;
+      startGame();
+    };
+
+    function startGame() {
+      show('game');
+      team = Math.random() < 0.5 ? 'A' : 'B';
+      push(ref(db, `rooms/${roomCode}/players`), { id: playerId, team });
+
+      onValue(roomRef(roomCode), snap => {
+        const data = snap.val();
+        if (!data) return;
+        score = data.score || { A:0, B:0 };
+        timerSec = data.timerSec;
+        updateHUD();
+      });
+
+      runTimer();
+      drawGrid();
+      cv.addEventListener('click', handleClick);
+    }
+
+    function updateHUD() {
+      const total = score.A + score.B || 1;
+      document.getElementById('barA').style.width = (score.A / total * 100) + '%';
+      document.getElementById('barB').style.width = (score.B / total * 100) + '%';
+      document.getElementById('scoreDisplay').textContent = `${score.A} – ${score.B}`;
+    }
+
+    function runTimer() {
+      const tick = () => {
+        if (timerSec <= 0) {
+          clearInterval(interval);
+          alert(`Waktu habis! Tim ${score.A > score.B ? 'A' : 'B'} menang`);
+          return;
+        }
+        const m = Math.floor(timerSec / 60);
+        const s = String(timerSec % 60).padStart(2, '0');
+        document.getElementById('timeLeft').textContent = `${m}:${s}`;
+        timerSec--;
+      };
+      tick(); interval = setInterval(tick, 1000);
+    }
+
+    function drawGrid() {
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+          ctx.strokeStyle = '#0ff';
+          ctx.strokeRect(x * size, y * size, size, size);
+          if (myGrid[y][x]) {
+            ctx.fillStyle = team === 'A' ? '#0af' : '#f05';
+            ctx.fillRect(x * size, y * size, size, size);
+          }
+        }
+      }
+    }
+
+    function handleClick(e) {
+      const rect = cv.getBoundingClientRect();
+      const x = Math.floor((e.clientX - rect.left) / size);
+      const y = Math.floor((e.clientY - rect.top) / size);
+      if (x < 0 || x > 7 || y < 0 || y > 7 || myGrid[y][x]) return;
+      myGrid[y][x] = 1;
+      // cek baris penuh
+      if (myGrid[y].every(v => v)) {
+        myGrid[y].fill(0);
+        set(ref(db, `rooms/${roomCode}/score/${team}`), increment(1));
+      }
+      drawGrid();
+    }
+  </script>
+</body>
+</html>
